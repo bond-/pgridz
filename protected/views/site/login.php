@@ -33,5 +33,5 @@ $this->breadcrumbs=array(
 		<?php echo $form->checkBoxRow($model,'rememberMe'); ?>
 		<?php echo $form->error($model,'rememberMe'); ?>
 
-	<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Login')); ?>
+	<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Login', 'type'=>'primary', 'size'=>'normal')); ?>
 <?php $this->endWidget(); ?>

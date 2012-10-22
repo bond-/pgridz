@@ -5,7 +5,14 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="en" />
 
+        <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/favicon.ico">
+        <?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/styles.css'); ?>
+
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/style.css" />
+        <!--[if lt IE 9]>
+                <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
@@ -46,11 +53,13 @@
 	<?php echo $content; ?>
 
 	<div class="clear"></div>
-
+	<hr />
 	<footer>
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
+		<p class="powered">
+			Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
+			All Rights Reserved.<br/>
+			<?php echo Yii::powered(); ?>
+		<p class="powered">
 	</footer><!-- footer -->
 
 </div><!-- page -->
