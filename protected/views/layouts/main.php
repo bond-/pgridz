@@ -5,23 +5,49 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="en" />
 
-	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
-	<![endif]-->
-
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
-
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
 <body>
 
 <div class="container" id="page">
-
+<?php $this->widget('bootstrap.widgets.TbNavbar',array(
+        'type'=>'inverse',
+        'brand'=>CHtml::encode(Yii::app()->name),
+        'collapse'=>true,
+        'items'=>array(
+                array(
+                        'class'=>'bootstrap.widgets.TbMenu',
+                        'items'=>array(
+                                array('label'=>'Demo', 'url'=>Yii::app()->homeUrl,
+                                                'active'=>Yii::app()->controller->id === 'site' && Yii::app()->controller->action->id === 'index'),
+                                array('label'=>'Setup', 'url'=>array('site/setup')),
+                        ),
+                        'htmlOptions'=>array('class'=>'pull-left'),
+                ),
+                '<div class="add-this pull-right">
+                        <!-- AddThis Button BEGIN -->
+                        <div class="addthis_toolbox addthis_default_style">
+                        <a class="addthis_button_facebook"></a>
+                        <a class="addthis_button_twitter"></a>
+                        <a class="addthis_button_google"></a>
+                        <a class="addthis_button_email"></a>
+                        <a class="addthis_button_compact"></a>
+                        <a class="addthis_counter addthis_bubble_style"></a>
+                        </div>
+                        <!-- AddThis Button END -->
+                </div>',
+                array(
+                        'class'=>'bootstrap.widgets.TbMenu',
+                        'items'=>array(
+                                array('label'=>'Bootstrap Docs', 'url'=>'http://twitter.github.com/bootstrap', 'linkOptions'=>array('target'=>'_blank')),
+                                array('label'=>'Fork me on Bitbucket', 'url'=>'http://www.bitbucket.org/Crisu83/yii-bootstrap', 'linkOptions'=>array('target'=>'_blank')),
+                                array('label'=>'Follow me on Twitter', 'url'=>'http://www.twitter.com/Crisu83', 'linkOptions'=>array('target'=>'_blank')),
+                        ),
+                        'htmlOptions'=>array('class'=>'pull-right'),
+                ),
+        ),
+)); ?>
 	<div id="header">
 		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
 	</div><!-- header -->
