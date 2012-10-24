@@ -3,3 +3,4 @@ assets/*
 protected/runtime/*
 !protected/runtime/.gitignore
 themes/classic/views/
+.idea
