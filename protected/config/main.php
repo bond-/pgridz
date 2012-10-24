@@ -10,7 +10,7 @@ return array(
     'name'=>'PGridz',
 
     // preloading 'log' component
-    'preload'=>array('log','bootstrap'),
+    'preload'=>array('log'),
 
     // autoloading model and component classes
     'import'=>array(
@@ -24,17 +24,11 @@ return array(
             'password'=>'123456',
             // If removed, Gii defaults to localhost only. Edit carefully to taste.
             'ipFilters'=>array('127.0.0.1','::1'),
-            'generatorPaths'=>array(
-                'bootstrap.gii',
-            ),
         ),
     ),
 
     // application components
     'components'=>array(
-        'bootstrap'=>array(
-            'class'=>'ext.bootstrap.components.Bootstrap',
-        ),
         'user'=>array(
             // enable cookie-based authentication
             'allowAutoLogin'=>true,
