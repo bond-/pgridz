@@ -25,13 +25,10 @@ $this->breadcrumbs=array(
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 		<?php echo $form->textFieldRow($model,'username'); ?>
-		<?php echo $form->error($model,'username'); ?>
 
 		<?php echo $form->passwordFieldRow($model,'password'); ?>
-		<?php echo $form->error($model,'password'); ?>
 
 		<?php echo $form->checkBoxRow($model,'rememberMe'); ?>
-		<?php echo $form->error($model,'rememberMe'); ?>
 
 	<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Login', 'type'=>'primary', 'size'=>'normal')); ?>
 <?php $this->endWidget(); ?>
