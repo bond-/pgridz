@@ -1,14 +1,27 @@
-<div class="subnav" style="margin-bottom: 10px;">
-   <ul class="nav nav-pills">
-      <li <? if(is_active()): ?>class="active"<? endif; ?>><a href="<?= site_url() ?>">Home</a></li>
-      <li class="dropdown">
-         <a class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-         <ul class="dropdown-menu">
-               <li><a href="">Item</a></li>
-         </ul>
-      </li> 
-      <ul class="nav nav-pills pull-right">
-         <li><a href="">Right</a></li>
-      </ul>
-   </ul>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="#">Project name</a>
+            <div class="nav-collapse collapse">
+                <p class="navbar-text pull-right">
+                    Logged in as <a href="#" class="navbar-link">Username</a>
+                </p>
+                <ul class="nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
 </div>
+<!--<ul class="breadcrumb" style="margin-top: 20px">
+    <li><a href="#">Home</a> <span class="divider">/</span></li>
+    <li><a href="#">Library</a> <span class="divider">/</span></li>
+    <li class="active">Data</li>
+</ul>-->
