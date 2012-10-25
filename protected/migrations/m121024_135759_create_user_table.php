@@ -5,7 +5,7 @@ class m121024_135759_create_user_table extends CDbMigration
     // Use safeUp/safeDown to do migration with transaction
     public function safeUp()
     {
-        $this->createTable('pg_user',array(
+        $this->createTable('user',array(
             'id'=> 'pk',
             'email' => 'string NOT NULL',
             'password' => 'string NOT NULL',
@@ -22,6 +22,6 @@ class m121024_135759_create_user_table extends CDbMigration
 
     public function safeDown()
     {
-        $this->dropTable('pg_user');
+        $this->dropTable('user');
     }
 }
