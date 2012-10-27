@@ -26,23 +26,28 @@ class UserController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('register'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','update','view'),
-				'users'=>array('@'),
-			),
-			/*array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('@'),
-			),*/
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+        return array(
+            array('allow',  // allow all users to perform 'index' and 'view' actions
+                'actions'=>array('register'),
+                'users'=>array('*'),
+            ),
+            array('allow', // allow authenticated user to perform 'index' action
+                'actions'=>array('index'),
+                'users'=>array('@'),
+            ),
+            array('allow', // allow authenticated user to perform 'update' and 'view' actions
+                'actions'=>array('update','view'),
+                'users'=>array('@'),
+                'expression'=>'Yii::app()->user->id==($_GET["id"])',
+            ),
+            /*array('allow', // allow admin user to perform 'admin' and 'delete' actions
+                'actions'=>array('admin','delete'),
+                'users'=>array('@'),
+            ),*/
+            array('deny',  // deny all users
+                'users'=>array('*'),
+            ),
+        );
 	}
 
 	/**
@@ -123,7 +128,7 @@ class UserController extends Controller
 	 */
 	public function actionIndex()
 	{
-        $this->redirect(array('view','id'=>Yii::app()->user->getId()));
+        $this->redirect(array('view','id'=>Yii::app()->user->id));
 	}
 
 	/**
