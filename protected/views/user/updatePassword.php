@@ -5,7 +5,7 @@
 
 $this->pageTitle=Yii::app()->name . ' - Login';
 $this->breadcrumbs=array(
-    'My Profile'=>array('view','id'=>Yii::app()->user->id),
+    'My Profile'=>array('view'),
     'Update password'
 );
 ?>

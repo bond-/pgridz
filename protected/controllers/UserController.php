@@ -27,18 +27,13 @@ class UserController extends Controller
 	public function accessRules()
 	{
         return array(
-            array('allow',  // allow all users to perform 'index' and 'view' actions
+            array('allow',  // allow all users to perform 'register' action
                 'actions'=>array('register'),
                 'users'=>array('*'),
             ),
-            array('allow', // allow authenticated user to perform 'index' action
-                'actions'=>array('index','updatePassword'),
+            array('allow', // allow authenticated user to perform 'index','updatePassword','update' and 'view' actions
+                'actions'=>array('index','updatePassword','update','view'),
                 'users'=>array('@'),
-            ),
-            array('allow', // allow authenticated user to perform 'update' and 'view' actions
-                'actions'=>array('update','view'),
-                'users'=>array('@'),
-                'expression'=>'Yii::app()->user->id==($_GET["id"])',
             ),
             /*array('allow', // allow admin user to perform 'admin' and 'delete' actions
                 'actions'=>array('admin','delete'),
@@ -52,10 +47,10 @@ class UserController extends Controller
 
 	/**
 	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionView($id)
+	public function actionView()
 	{
+        $id = Yii::app()->user->id;
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
@@ -88,10 +83,10 @@ class UserController extends Controller
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($id)
+	public function actionUpdate()
 	{
+        $id = Yii::app()->user->id;
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -129,7 +124,7 @@ class UserController extends Controller
 	 */
 	public function actionIndex()
 	{
-        $this->redirect(array('view','id'=>Yii::app()->user->id));
+        $this->redirect(array('view'));
 	}
 
     public function actionUpdatePassword()

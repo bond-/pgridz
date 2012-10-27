@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'View Profile', 'url'=>array('view', 'id'=>$model->id)),
+	array('label'=>'View Profile', 'url'=>array('view')),
 	array('label'=>'Update Password', 'url'=>array('updatePassword')),
 );
 ?>
