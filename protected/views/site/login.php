@@ -50,4 +50,8 @@ $this->breadcrumbs=array(
     </div>
 
     <?php $this->endWidget(); ?>
+
+    <div class="row buttons">
+        <?php echo CHtml::link('Register',$this->createUrl('user/register')); ?>
+    </div>
 </div><!-- form -->
