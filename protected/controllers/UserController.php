@@ -32,7 +32,7 @@ class UserController extends Controller
                 'users'=>array('*'),
             ),
             array('allow', // allow authenticated user to perform 'index' action
-                'actions'=>array('index'),
+                'actions'=>array('index','updatePassword'),
                 'users'=>array('@'),
             ),
             array('allow', // allow authenticated user to perform 'update' and 'view' actions
@@ -70,7 +70,7 @@ class UserController extends Controller
 		$model=new User;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['User']))
 		{
@@ -95,11 +95,12 @@ class UserController extends Controller
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
+            $model->password=md5($model->password);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -129,6 +130,33 @@ class UserController extends Controller
 	public function actionIndex()
 	{
         $this->redirect(array('view','id'=>Yii::app()->user->id));
+	}
+
+    public function actionUpdatePassword()
+	{
+        $model=new UpdatePasswordForm;
+        // if it is ajax validation request
+        if(isset($_POST['ajax']) && $_POST['ajax']==='update-password-form')
+        {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+
+        // collect user input data
+        if(isset($_POST['UpdatePasswordForm']))
+        {
+            $model->attributes=$_POST['UpdatePasswordForm'];
+            // validate user input and redirect to the previous page if valid
+            if($model->validate()){
+                $id = Yii::app()->user->id;
+                $user = $this->loadModel($id);
+                $user->password = md5($model->newPassword1);
+                if($user->save())
+                    $this->redirect(array('view','id'=>$id));
+            }
+        }
+        // display the login form
+        $this->render('updatePassword',array('model'=>$model));
 	}
 
 	/**

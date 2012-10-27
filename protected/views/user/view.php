@@ -3,23 +3,21 @@
 /* @var $model User */
 
 $this->breadcrumbs=array(
-	'Users'=>array('index'),
-	$model->id,
+	'My Profile'
 );
 
 $this->menu=array(
 	array('label'=>'Update Profile', 'url'=>array('update', 'id'=>$model->id)),
+    array('label'=>'Update Password', 'url'=>array('updatePassword')),
 );
 ?>
 
-<h1>View User #<?php echo $model->id; ?></h1>
+<h1>My Profile</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'id',
 		'email',
-		'password',
 		'city_id',
 		'state_id',
 		'country_id',

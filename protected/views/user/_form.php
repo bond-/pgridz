@@ -8,7 +8,8 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'user-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
+	'enableClientValidation'=>true,
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -20,12 +21,13 @@
 		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'email'); ?>
 	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'password'); ?>
-	</div>
+    <?php if($model->isNewRecord):?>
+    <div class="row">
+        <?php echo $form->labelEx($model,'password'); ?>
+        <?php echo $form->passwordField($model,'password',array('size'=>60,'maxlength'=>255)); ?>
+        <?php echo $form->error($model,'password'); ?>
+    </div>
+    <?php endif; ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'city_id'); ?>
