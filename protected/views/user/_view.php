@@ -42,10 +42,6 @@
 	<?php echo CHtml::encode($data->end_date); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('firm')); ?>:</b>
-	<?php echo CHtml::encode($data->firm); ?>
-	<br />
-
 	*/ ?>
 
 </div>

@@ -43,17 +43,12 @@
 
 	<div class="row">
 		<?php echo $form->label($model,'join_date'); ?>
-		<?php echo $form->textField($model,'join_date'); ?>
+        <?php $this->widget('zii.widgets.jui.CJuiDatePicker', array('model'=>$model,'attribute'=>'join_date'));?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'end_date'); ?>
-		<?php echo $form->textField($model,'end_date'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'firm'); ?>
-		<?php echo $form->textField($model,'firm',array('size'=>60,'maxlength'=>255)); ?>
+        <?php $this->widget('zii.widgets.jui.CJuiDatePicker', array('model'=>$model,'attribute'=>'end_date'));?>
 	</div>
 
 	<div class="row buttons">

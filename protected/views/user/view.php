@@ -30,6 +30,5 @@ $this->menu=array(
 		'zip',
 		'join_date',
 		'end_date',
-		'firm',
 	),
 )); ?>

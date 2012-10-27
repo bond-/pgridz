@@ -1,28 +1,22 @@
 <?php
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "company".
  *
- * The followings are the available columns in table 'user':
+ * The followings are the available columns in table 'company':
  * @property integer $id
- * @property string $email
- * @property string $password
- * @property integer $city_id
- * @property integer $state_id
- * @property integer $country_id
- * @property string $zip
- * @property string $join_date
- * @property string $end_date
+ * @property integer $user_id
+ * @property string $name
  *
  * The followings are the available model relations:
  * @property Contact[] $contacts
  */
-class User extends CActiveRecord
+class Company extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return User the static model class
+	 * @return Company the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -34,7 +28,7 @@ class User extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'user';
+		return 'company';
 	}
 
 	/**
@@ -45,13 +39,12 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('email, password, join_date', 'required'),
-			array('city_id, state_id, country_id', 'numerical', 'integerOnly'=>true),
-			array('email, password, zip', 'length', 'max'=>255),
-			array('end_date', 'safe'),
+			array('name', 'required'),
+			array('user_id', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, email, password, city_id, state_id, country_id, zip, join_date, end_date', 'safe', 'on'=>'search'),
+			array('id, user_id, name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,7 +56,7 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'contacts' => array(self::HAS_MANY, 'Contact', 'user_id'),
+			'contacts' => array(self::HAS_MANY, 'Contact', 'company_id'),
 		);
 	}
 
@@ -74,14 +67,8 @@ class User extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'email' => 'Email',
-			'password' => 'Password',
-			'city_id' => 'City',
-			'state_id' => 'State',
-			'country_id' => 'Country',
-			'zip' => 'Zip',
-			'join_date' => 'Join Date',
-			'end_date' => 'End Date',
+			'user_id' => 'User',
+			'name' => 'Name',
 		);
 	}
 
@@ -97,14 +84,8 @@ class User extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->compare('city_id',$this->city_id);
-		$criteria->compare('state_id',$this->state_id);
-		$criteria->compare('country_id',$this->country_id);
-		$criteria->compare('zip',$this->zip,true);
-		$criteria->compare('join_date',$this->join_date,true);
-		$criteria->compare('end_date',$this->end_date,true);
+		$criteria->compare('user_id',$this->user_id);
+		$criteria->compare('name',$this->name,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

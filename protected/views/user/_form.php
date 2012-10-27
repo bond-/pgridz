@@ -53,20 +53,14 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'join_date'); ?>
-		<?php echo $form->textField($model,'join_date'); ?>
+        <?php $this->widget('zii.widgets.jui.CJuiDatePicker', array('model'=>$model,'attribute'=>'join_date'));?>
 		<?php echo $form->error($model,'join_date'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'end_date'); ?>
-		<?php echo $form->textField($model,'end_date'); ?>
+        <?php $this->widget('zii.widgets.jui.CJuiDatePicker', array('model'=>$model,'attribute'=>'end_date'));?>
 		<?php echo $form->error($model,'end_date'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'firm'); ?>
-		<?php echo $form->textField($model,'firm',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'firm'); ?>
 	</div>
 
 	<div class="row buttons">
