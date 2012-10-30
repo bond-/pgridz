@@ -22,18 +22,18 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'city_id'); ?>
-		<?php echo $form->textField($model,'city_id'); ?>
+		<?php echo $form->label($model,'city'); ?>
+		<?php echo $form->textField($model,'city',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'state_id'); ?>
-		<?php echo $form->textField($model,'state_id'); ?>
+		<?php echo $form->label($model,'state'); ?>
+		<?php echo $form->textField($model,'state',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'country_id'); ?>
-		<?php echo $form->textField($model,'country_id'); ?>
+		<?php echo $form->label($model,'country'); ?>
+		<?php echo $form->textField($model,'country',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row">

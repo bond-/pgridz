@@ -17,16 +17,16 @@
 	<?php echo CHtml::encode($data->password); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('city_id')); ?>:</b>
-	<?php echo CHtml::encode($data->city_id); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('city')); ?>:</b>
+	<?php echo CHtml::encode($data->city); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('state_id')); ?>:</b>
-	<?php echo CHtml::encode($data->state_id); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('state')); ?>:</b>
+	<?php echo CHtml::encode($data->state); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('country_id')); ?>:</b>
-	<?php echo CHtml::encode($data->country_id); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('country')); ?>:</b>
+	<?php echo CHtml::encode($data->country); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('zip')); ?>:</b>

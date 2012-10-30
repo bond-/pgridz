@@ -48,9 +48,9 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'id',
 		'email',
 		'password',
-		'city_id',
-		'state_id',
-		'country_id',
+		'city',
+		'state',
+		'country',
 		/*
 		'zip',
 		'join_date',

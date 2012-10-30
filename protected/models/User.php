@@ -7,9 +7,9 @@
  * @property integer $id
  * @property string $email
  * @property string $password
- * @property integer $city_id
- * @property integer $state_id
- * @property integer $country_id
+ * @property string $city
+ * @property string $state
+ * @property string $country
  * @property string $zip
  * @property string $join_date
  * @property string $end_date
@@ -45,15 +45,15 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('email', 'email'),
-			array('email', 'unique'),
+            array('email', 'email'),
+            array('email', 'unique'),
 			array('email, password, join_date', 'required'),
-			array('city_id, state_id, country_id', 'numerical', 'integerOnly'=>true),
-			array('email, password, zip', 'length', 'max'=>255),
-			array('join_date, end_date', 'date', 'format'=>'mm/dd/yyyy'),
+			array('email, password, city, state, country, zip', 'length', 'max'=>255),
+            array('join_date, end_date', 'date', 'format'=>'mm/dd/yyyy'),
+			array('end_date', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, email, password, city_id, state_id, country_id, zip, join_date, end_date', 'safe', 'on'=>'search'),
+			array('id, email, password, city, state, country, zip, join_date, end_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -78,9 +78,9 @@ class User extends CActiveRecord
 			'id' => 'ID',
 			'email' => 'Email',
 			'password' => 'Password',
-			'city_id' => 'City',
-			'state_id' => 'State',
-			'country_id' => 'Country',
+			'city' => 'City',
+			'state' => 'State',
+			'country' => 'Country',
 			'zip' => 'Zip',
 			'join_date' => 'Join Date',
 			'end_date' => 'End Date',
@@ -101,9 +101,9 @@ class User extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('password',$this->password,true);
-		$criteria->compare('city_id',$this->city_id);
-		$criteria->compare('state_id',$this->state_id);
-		$criteria->compare('country_id',$this->country_id);
+		$criteria->compare('city',$this->city,true);
+		$criteria->compare('state',$this->state,true);
+		$criteria->compare('country',$this->country,true);
 		$criteria->compare('zip',$this->zip,true);
 		$criteria->compare('join_date',$this->join_date,true);
 		$criteria->compare('end_date',$this->end_date,true);

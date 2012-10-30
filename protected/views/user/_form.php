@@ -30,21 +30,21 @@
     <?php endif; ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'city_id'); ?>
-		<?php echo $form->textField($model,'city_id'); ?>
-		<?php echo $form->error($model,'city_id'); ?>
+		<?php echo $form->labelEx($model,'city'); ?>
+		<?php echo $form->textField($model,'city',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->error($model,'city'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'state_id'); ?>
-		<?php echo $form->textField($model,'state_id'); ?>
-		<?php echo $form->error($model,'state_id'); ?>
+		<?php echo $form->labelEx($model,'state'); ?>
+		<?php echo $form->textField($model,'state',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->error($model,'state'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'country_id'); ?>
-		<?php echo $form->textField($model,'country_id'); ?>
-		<?php echo $form->error($model,'country_id'); ?>
+		<?php echo $form->labelEx($model,'country'); ?>
+		<?php echo $form->textField($model,'country',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->error($model,'country'); ?>
 	</div>
 
 	<div class="row">
