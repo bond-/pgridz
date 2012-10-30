@@ -10,6 +10,9 @@
 	'id'=>'user-form',
 	'enableAjaxValidation'=>true,
 	'enableClientValidation'=>true,
+    'clientOptions'=>array(
+        'validateOnSubmit'=>true,
+    ),
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
