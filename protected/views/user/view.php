@@ -18,9 +18,9 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'email',
-		'city_id',
-		'state_id',
-		'country_id',
+		'city',
+		'state',
+		'country',
 		'zip',
 		'join_date',
 		'end_date',

@@ -72,7 +72,7 @@ class UserController extends Controller
 			$model->attributes=$_POST['User'];
 			$model->password=md5($model->password);
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('view'));
 		}
 
 		$this->render('register',array(
