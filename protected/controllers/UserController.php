@@ -70,7 +70,7 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-			$model->password=md5($model->password);
+			$model->password=Yii::app()->hasher->hashPassword($model->password);
 			if($model->save())
 				$this->redirect(array('view'));
 		}
@@ -95,7 +95,7 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-            $model->password=md5($model->password);
+            $model->password=Yii::app()->hasher->hashPassword($model->password);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -145,7 +145,7 @@ class UserController extends Controller
             if($model->validate()){
                 $id = Yii::app()->user->id;
                 $user = $this->loadModel($id);
-                $user->password = md5($model->newPassword1);
+                $user->password = Yii::app()->hasher->hashPassword($model->newPassword1);
                 if($user->save())
                     $this->redirect(array('view','id'=>$id));
             }

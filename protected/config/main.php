@@ -16,6 +16,7 @@ return array(
     'import'=>array(
         'application.models.*',
         'application.components.*',
+        'application.extensions.phpass.*',
     ),
 
     'modules'=>array(
@@ -32,6 +33,11 @@ return array(
         'user'=>array(
             // enable cookie-based authentication
             'allowAutoLogin'=>true,
+        ),
+        'hasher'=>array (
+            'class'=>'Phpass',
+            'hashPortable'=>false,
+            'hashCostLog2'=>10,
         ),
         // uncomment the following to enable URLs in path-format
         /*
