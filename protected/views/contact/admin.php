@@ -51,8 +51,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
             'value'=>'$data->getDisplayIqLabel($data->iq)',
         ),
         array(
-            'name'=>'like',
-            'value'=>'$data->getDisplayLikeLabel($data->like)',
+            'name'=>'c_like',
+            'value'=>'$data->getDisplayLikeLabel($data->c_like)',
         ),
 		/*
 		'city',
@@ -63,7 +63,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'notes',
 		'questions_to_ask',
 		'iq',
-		'like',
+		'c_like',
 		*/
 		array(
 			'class'=>'CButtonColumn',

@@ -99,15 +99,15 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'like'); ?>
-        <?php echo $form->radioButtonList($model,'like',array(
+		<?php echo $form->labelEx($model,'c_like'); ?>
+        <?php echo $form->radioButtonList($model,'c_like',array(
                 0=>'Drive me nuts',
                 1=>'Ok',
                 2=>'Hi',
                 3=>'Smooch',
                 4=>'Love you',
             ),array('separator'=>" "))?>
-		<?php echo $form->error($model,'like'); ?>
+		<?php echo $form->error($model,'c_like'); ?>
 	</div>
 
 	<div class="row buttons">

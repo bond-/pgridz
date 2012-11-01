@@ -40,8 +40,8 @@ $this->menu=array(
             'value'=>$model->getDisplayIqLabel($model->iq)
         ),
         array(
-            'label'=>$model->getAttributeLabel('like'),
-            'value'=>$model->getDisplayLikeLabel($model->like)
+            'label'=>$model->getAttributeLabel('c_like'),
+            'value'=>$model->getDisplayLikeLabel($model->c_like)
         ),
 	),
 )); ?>

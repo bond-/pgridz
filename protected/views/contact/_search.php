@@ -78,8 +78,8 @@
     </div>
 
     <div class="row">
-        <?php echo $form->label($model,'like'); ?>
-        <?php echo $form->radioButtonList($model,'like',array(
+        <?php echo $form->label($model,'c_like'); ?>
+        <?php echo $form->radioButtonList($model,'c_like',array(
                 0=>'Drive me nuts',
                 1=>'Ok',
                 2=>'Hi',

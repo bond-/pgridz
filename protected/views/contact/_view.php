@@ -55,8 +55,8 @@
 	<?php echo CHtml::encode($data->iq); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('like')); ?>:</b>
-	<?php echo CHtml::encode($data->like); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('c_like')); ?>:</b>
+	<?php echo CHtml::encode($data->c_like); ?>
 	<br />
 
 	*/ ?>

@@ -18,7 +18,7 @@
  * @property string $notes
  * @property string $questions_to_ask
  * @property integer $iq
- * @property integer $like
+ * @property integer $c_like
  *
  * The followings are the available model relations:
  * @property Company $company
@@ -54,14 +54,14 @@ class Contact extends CActiveRecord
 		return array(
             array('email','email'),
             array('iq','in','range'=>array(0,1,2,3,4)),
-            array('like','in','range'=>array(0,1,2,3,4)),
+            array('c_like','in','range'=>array(0,1,2,3,4)),
 			array('user_id, company_id, name', 'required'),
-			array('user_id, company_id, iq, like', 'numerical', 'integerOnly'=>true),
+			array('user_id, company_id, iq, c_like', 'numerical', 'integerOnly'=>true),
 			array('name, title, group_division, city, country, phone, email, school', 'length', 'max'=>255),
 			array('notes, questions_to_ask', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, user_id, company_id, name, title, group_division, city, country, phone, email, school, notes, questions_to_ask, iq, like', 'safe', 'on'=>'search'),
+			array('id, user_id, company_id, name, title, group_division, city, country, phone, email, school, notes, questions_to_ask, iq, c_like', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -122,7 +122,7 @@ class Contact extends CActiveRecord
 			'notes' => 'Notes',
 			'questions_to_ask' => 'Questions To Ask',
 			'iq' => 'Iq',
-			'like' => 'Like',
+			'c_like' => 'Like',
 		);
 	}
 
@@ -151,7 +151,7 @@ class Contact extends CActiveRecord
 		$criteria->compare('notes',$this->notes,true);
 		$criteria->compare('questions_to_ask',$this->questions_to_ask,true);
 		$criteria->compare('iq',$this->iq);
-		$criteria->compare('like',$this->like);
+		$criteria->compare('c_like',$this->c_like);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
