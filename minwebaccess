@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+sudo chown -R www-data. assets
+sudo chown -R www-data. protected/runtime

@@ -1,6 +1,7 @@
 <?php
 /* @var $this ContactController */
 /* @var $model Contact */
+/* @var $companies Company[] */
 /* @var $form CActiveForm */
 ?>
 
@@ -16,14 +17,8 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'user_id'); ?>
-		<?php echo $form->textField($model,'user_id'); ?>
-		<?php echo $form->error($model,'user_id'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'company_id'); ?>
-		<?php echo $form->textField($model,'company_id'); ?>
+        <?php echo $form->dropDownList($model, 'company_id', CHtml::listData($companies,'id','name'), array('empty'=>'Select a company')); ?>
 		<?php echo $form->error($model,'company_id'); ?>
 	</div>
 
@@ -89,7 +84,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'iq'); ?>
-        <?php $this->widget('zii.widgets.jui.CJuiSliderInput', array(
+        <?php /*$this->widget('zii.widgets.jui.CJuiSliderInput', array(
             'model'=>$model,
             'attribute'=>'iq',
             // additional javascript options for the slider plugin
@@ -101,8 +96,15 @@
             'htmlOptions'=>array(
                 'style'=>'width:100px;top:5px;bottom:5px;'
             ),
-        )); ?>
-<!--		--><?php //echo $form->textField($model,'iq'); ?>
+        )); */?>
+        <?php echo $form->radioButtonList($model,'iq',array(
+        0=>'Brain dead',
+        1=>'Bumbling bear',
+        2=>'Average',
+        3=>'Smarty pants',
+        4=>'Einstein',
+    ),array('separator'=>" | "))?>
+		<?php echo $form->textField($model,'iq'); ?>
 		<?php echo $form->error($model,'iq'); ?>
 	</div>
 

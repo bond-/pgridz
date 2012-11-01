@@ -27,17 +27,9 @@ class ContactController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+			array('allow', // allow authenticated user to perform the below listed actions
+				'actions'=>array('index','view','create','update','admin','delete'),
 				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -63,6 +55,8 @@ class ContactController extends Controller
 	public function actionCreate()
 	{
 		$model=new Contact;
+        $model->user_id = Yii::app()->user->id;
+        $companies = Company::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -76,6 +70,7 @@ class ContactController extends Controller
 
 		$this->render('create',array(
 			'model'=>$model,
+			'companies'=>$companies,
 		));
 	}
 
@@ -122,7 +117,9 @@ class ContactController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Contact');
+        $criteria = new CDbCriteria;
+        $criteria->compare('user_id',Yii::app()->user->id);
+		$dataProvider=new CActiveDataProvider('Contact',array('criteria'=>$criteria));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -150,7 +147,7 @@ class ContactController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Contact::model()->findByPk($id);
+		$model=Contact::model()->findByAttributes(array('id'=>$id,'user_id'=>Yii::app()->user->id));
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
