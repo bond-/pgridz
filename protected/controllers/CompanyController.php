@@ -27,17 +27,9 @@ class CompanyController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+			array('allow', // allow authenticated user to perform the below listed actions
+				'actions'=>array('index','view','create','update','admin','delete'),
 				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -63,9 +55,10 @@ class CompanyController extends Controller
 	public function actionCreate()
 	{
 		$model=new Company;
+        $model->user_id = Yii::app()->user->id;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Company']))
 		{
@@ -89,7 +82,7 @@ class CompanyController extends Controller
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Company']))
 		{
@@ -122,7 +115,9 @@ class CompanyController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Company');
+        $criteria = new CDbCriteria;
+        $criteria->compare('user_id',Yii::app()->user->id);
+		$dataProvider=new CActiveDataProvider('Company',array('criteria'=>$criteria));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -150,7 +145,7 @@ class CompanyController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Company::model()->findByPk($id);
+		$model=Company::model()->findByAttributes(array('id'=>$id,'user_id'=>Yii::app()->user->id));
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;

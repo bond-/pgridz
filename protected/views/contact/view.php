@@ -16,14 +16,15 @@ $this->menu=array(
 );
 ?>
 
-<h1>View Contact #<?php echo $model->id; ?></h1>
+<h1>View Contact: <?php echo $model->name; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'id',
-		'user_id',
-		'company_id',
+        array(
+            'label'=>$model->company->getAttributeLabel('name'),
+            'value'=>$model->company->name
+        ),
 		'name',
 		'title',
 		'group_division',
@@ -34,7 +35,13 @@ $this->menu=array(
 		'school',
 		'notes',
 		'questions_to_ask',
-		'iq',
-		'like',
+        array(
+            'label'=>$model->getAttributeLabel('iq'),
+            'value'=>$model->getDisplayIqLabel($model->iq)
+        ),
+        array(
+            'label'=>$model->getAttributeLabel('like'),
+            'value'=>$model->getDisplayLikeLabel($model->like)
+        ),
 	),
 )); ?>

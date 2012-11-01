@@ -10,6 +10,7 @@
  *
  * The followings are the available model relations:
  * @property Contact[] $contacts
+ * @property User $user
  */
 class Company extends CActiveRecord
 {
@@ -57,6 +58,7 @@ class Company extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'contacts' => array(self::HAS_MANY, 'Contact', 'company_id'),
+            'user' => array(self::BELONGS_TO, 'User', 'user_id'),
 		);
 	}
 
@@ -68,7 +70,7 @@ class Company extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'user_id' => 'User',
-			'name' => 'Name',
+			'name' => 'Company Name',
 		);
 	}
 
@@ -83,8 +85,7 @@ class Company extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('user_id',$this->user_id);
+		$criteria->compare('user_id',Yii::app()->user->id);
 		$criteria->compare('name',$this->name,true);
 
 		return new CActiveDataProvider($this, array(

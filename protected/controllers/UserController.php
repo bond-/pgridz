@@ -31,7 +31,7 @@ class UserController extends Controller
                 'actions'=>array('register'),
                 'users'=>array('*'),
             ),
-            array('allow', // allow authenticated user to perform 'index','updatePassword','update' and 'view' actions
+            array('allow', // allow authenticated user to perform the below listed actions
                 'actions'=>array('index','updatePassword','update','view'),
                 'users'=>array('@'),
             ),

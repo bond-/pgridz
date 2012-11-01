@@ -1,6 +1,7 @@
 <?php
 /* @var $this ContactController */
 /* @var $model Contact */
+/* @var $companies Company[] */
 
 $this->breadcrumbs=array(
 	'Contacts'=>array('index'),
@@ -16,6 +17,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update Contact <?php echo $model->id; ?></h1>
+<h1>Update Contact: <?php echo $model->name; ?></h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array('model'=>$model,'companies'=>$companies)); ?>

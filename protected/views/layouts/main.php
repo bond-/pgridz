@@ -33,6 +33,8 @@
 				array('label'=>'About Us', 'url'=>array('/site/page', 'view'=>'about')),
 				array('label'=>'Suggestion/Comment', 'url'=>array('/site/contact')),
 				array('label'=>'My Profile', 'url'=>array('/user/view'),'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Contacts', 'url'=>array('/contact/index'),'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Companies', 'url'=>array('/company/index'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),
