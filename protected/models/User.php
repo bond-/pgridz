@@ -46,6 +46,7 @@ class User extends CActiveRecord
 		// will receive user inputs.
 		return array(
             array('email', 'email'),
+            array('email', 'checkdns'),
             array('email', 'unique'),
 			array('email, password, join_date', 'required'),
 			array('email, password, city, state, country, zip', 'length', 'max'=>255),
@@ -56,6 +57,20 @@ class User extends CActiveRecord
 			array('id, email, password, city, state, country, zip, join_date, end_date', 'safe', 'on'=>'search'),
 		);
 	}
+
+    /**
+     * Checks if a DNS record exists for domain name in the user's email
+     * This is the checkdns declared in rules()
+     */
+    public function checkdns(){
+        if(!$this->hasErrors())
+        {
+            $domain = explode('@',$this->email,2);
+            if(!checkdnsrr($domain[1],'MX')) {
+                $this->addError('email','Invalid domain name: '.$domain[1]);
+            }
+        }
+    }
 
 	/**
 	 * @return array relational rules.
