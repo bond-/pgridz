@@ -18,7 +18,7 @@
  * @property string $notes
  * @property string $questions_to_ask
  * @property integer $iq
- * @property integer $like
+ * @property integer $c_like
  *
  * The followings are the available model relations:
  * @property Company $company
@@ -52,15 +52,42 @@ class Contact extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+            array('email','email'),
+            array('iq','in','range'=>array(0,1,2,3,4)),
+            array('c_like','in','range'=>array(0,1,2,3,4)),
 			array('user_id, company_id, name', 'required'),
-			array('user_id, company_id, iq, like', 'numerical', 'integerOnly'=>true),
+			array('user_id, company_id, iq, c_like', 'numerical', 'integerOnly'=>true),
 			array('name, title, group_division, city, country, phone, email, school', 'length', 'max'=>255),
 			array('notes, questions_to_ask', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, user_id, company_id, name, title, group_division, city, country, phone, email, school, notes, questions_to_ask, iq, like', 'safe', 'on'=>'search'),
+			array('id, user_id, company_id, name, title, group_division, city, country, phone, email, school, notes, questions_to_ask, iq, c_like', 'safe', 'on'=>'search'),
 		);
 	}
+
+    public function getDisplayIqLabel($val){
+        if(!isset($val)){
+            return null;
+        }
+        $iqMap = array(0=>'Brain dead',
+                1=>'Bumbling bear',
+                2=>'Average',
+                3=>'Smarty pants',
+                4=>'Einstein');
+        return $iqMap[$val];
+    }
+
+    public function getDisplayLikeLabel($val){
+        if(!isset($val)){
+            return null;
+        }
+        $likeMap = array(0=>'Drive me nuts',
+                    1=>'Ok',
+                    2=>'Hi',
+                    3=>'Smooch',
+                    4=>'Love you');
+        return $likeMap[$val];
+    }
 
 	/**
 	 * @return array relational rules.
@@ -84,7 +111,7 @@ class Contact extends CActiveRecord
 			'id' => 'ID',
 			'user_id' => 'User',
 			'company_id' => 'Company',
-			'name' => 'Name',
+			'name' => 'Contact Name',
 			'title' => 'Title',
 			'group_division' => 'Group Division',
 			'city' => 'City',
@@ -95,7 +122,7 @@ class Contact extends CActiveRecord
 			'notes' => 'Notes',
 			'questions_to_ask' => 'Questions To Ask',
 			'iq' => 'Iq',
-			'like' => 'Like',
+			'c_like' => 'Like',
 		);
 	}
 
@@ -111,7 +138,7 @@ class Contact extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('user_id',$this->user_id);
+		$criteria->compare('user_id',Yii::app()->user->id);
 		$criteria->compare('company_id',$this->company_id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('title',$this->title,true);
@@ -124,7 +151,7 @@ class Contact extends CActiveRecord
 		$criteria->compare('notes',$this->notes,true);
 		$criteria->compare('questions_to_ask',$this->questions_to_ask,true);
 		$criteria->compare('iq',$this->iq);
-		$criteria->compare('like',$this->like);
+		$criteria->compare('c_like',$this->c_like);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

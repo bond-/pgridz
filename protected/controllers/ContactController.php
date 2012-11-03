@@ -59,7 +59,7 @@ class ContactController extends Controller
         $companies = Company::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Contact']))
 		{
@@ -82,9 +82,10 @@ class ContactController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+        $companies = Company::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Contact']))
 		{
@@ -95,6 +96,7 @@ class ContactController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
+			'companies'=>$companies,
 		));
 	}
 

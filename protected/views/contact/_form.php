@@ -9,7 +9,11 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'contact-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
+    'enableClientValidation'=>true,
+    'clientOptions'=>array(
+        'validateOnSubmit'=>true,
+    ),
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -82,36 +86,28 @@
 		<?php echo $form->error($model,'questions_to_ask'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'iq'); ?>
-        <?php /*$this->widget('zii.widgets.jui.CJuiSliderInput', array(
-            'model'=>$model,
-            'attribute'=>'iq',
-            // additional javascript options for the slider plugin
-            'options'=>array(
-                'min'=>0,
-                'max'=>4,
-                'step'=>1,
-            ),
-            'htmlOptions'=>array(
-                'style'=>'width:100px;top:5px;bottom:5px;'
-            ),
-        )); */?>
+    <div class="row">
+        <?php echo $form->labelEx($model,'iq'); ?>
         <?php echo $form->radioButtonList($model,'iq',array(
-        0=>'Brain dead',
-        1=>'Bumbling bear',
-        2=>'Average',
-        3=>'Smarty pants',
-        4=>'Einstein',
-    ),array('separator'=>" | "))?>
-		<?php echo $form->textField($model,'iq'); ?>
+                0=>'Brain dead',
+                1=>'Bumbling bear',
+                2=>'Average',
+                3=>'Smarty pants',
+                4=>'Einstein',
+            ),array('separator'=>" "))?>
 		<?php echo $form->error($model,'iq'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'like'); ?>
-		<?php echo $form->textField($model,'like',array('placeholder'=>$model->getAttributeLabel('like'))); ?>
-		<?php echo $form->error($model,'like'); ?>
+		<?php echo $form->labelEx($model,'c_like'); ?>
+        <?php echo $form->radioButtonList($model,'c_like',array(
+                0=>'Drive me nuts',
+                1=>'Ok',
+                2=>'Hi',
+                3=>'Smooch',
+                4=>'Love you',
+            ),array('separator'=>" "))?>
+		<?php echo $form->error($model,'c_like'); ?>
 	</div>
 
 	<div class="row buttons">

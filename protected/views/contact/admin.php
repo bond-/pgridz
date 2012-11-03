@@ -45,12 +45,15 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
-		'user_id',
-		'company_id',
 		'name',
-		'title',
-		'group_division',
+        array(
+            'name'=>'iq',
+            'value'=>'$data->getDisplayIqLabel($data->iq)',
+        ),
+        array(
+            'name'=>'c_like',
+            'value'=>'$data->getDisplayLikeLabel($data->c_like)',
+        ),
 		/*
 		'city',
 		'country',
@@ -60,10 +63,25 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'notes',
 		'questions_to_ask',
 		'iq',
-		'like',
+		'c_like',
 		*/
 		array(
 			'class'=>'CButtonColumn',
+            'buttons'=>array
+            (
+                'view'=>array
+                (
+                    'url'=>'Yii::app()->createUrl("contact/view", array("id"=>$data->id))',
+                ),
+                'update'=>array
+                (
+                    'url'=>'Yii::app()->createUrl("contact/update", array("id"=>$data->id))',
+                ),
+                'delete'=>array
+                (
+                    'url'=>'Yii::app()->createUrl("contact/delete", array("id"=>$data->id))',
+                ),
+            )
 		),
 	),
 )); ?>

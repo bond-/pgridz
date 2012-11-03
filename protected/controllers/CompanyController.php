@@ -58,7 +58,7 @@ class CompanyController extends Controller
         $model->user_id = Yii::app()->user->id;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Company']))
 		{
@@ -82,7 +82,7 @@ class CompanyController extends Controller
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Company']))
 		{
