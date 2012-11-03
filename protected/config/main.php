@@ -18,6 +18,7 @@ return array(
         'application.components.*',
         'application.extensions.*',
         'application.extensions.phpass.*',
+        'application.extensions.mail.*',
     ),
 
     'modules'=>array(
@@ -31,6 +32,20 @@ return array(
 
     // application components
     'components'=>array(
+        'mail' => array(
+            'class' => 'YiiMail',
+            'transportType' => 'smtp',
+            'transportOptions' => array(
+                'host'=>'smtp.gmail.com',
+                'username'=>'xxxxxx@gmail.com',
+                'password'=>'xxxxxx',
+                'port'=>'587',
+                'encryption'=>'tls'
+            ),
+            'viewPath' => 'application.views.mail',
+            'logging' => true,
+            'dryRun' => false
+        ),
         'user'=>array(
             // enable cookie-based authentication
             'allowAutoLogin'=>true,
