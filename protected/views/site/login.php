@@ -1,52 +1,25 @@
 <?php
 /* @var $this SiteController */
 /* @var $model LoginForm */
-/* @var $form CActiveForm  */
-
-$this->pageTitle=Yii::app()->name . ' - Login';
-$this->breadcrumbs=array(
-    'Login',
-);
+/* @var $form TbActiveForm  */
 ?>
 
-<h1>Login</h1>
-
-<div class="form">
-    <?php $form=$this->beginWidget('CActiveForm', array(
+<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'login-form',
     'enableClientValidation'=>true,
     'clientOptions'=>array(
         'validateOnSubmit'=>true,
     ),
+    'htmlOptions'=>array('class'=>'well'),
 )); ?>
 
-    <p class="note">Fields with <span class="required">*</span> are required.</p>
+<p class="note">Fields with <span class="required">*</span> are required.</p>
 
-    <div class="row">
-        <?php echo $form->labelEx($model,'email'); ?>
-        <?php echo $form->textField($model,'email'); ?>
-        <?php echo $form->error($model,'email'); ?>
-    </div>
+<?php echo $form->textFieldRow($model,'email'); ?>
 
-    <div class="row">
-        <?php echo $form->labelEx($model,'password'); ?>
-        <?php echo $form->passwordField($model,'password'); ?>
-        <?php echo $form->error($model,'password'); ?>
-    </div>
+<?php echo $form->passwordFieldRow($model,'password'); ?>
 
-    <div class="row rememberMe">
-        <?php echo $form->checkBox($model,'rememberMe'); ?>
-        <?php echo $form->label($model,'rememberMe'); ?>
-        <?php echo $form->error($model,'rememberMe'); ?>
-    </div>
+<?php echo $form->checkBoxRow($model,'rememberMe'); ?>
 
-    <div class="row buttons">
-        <?php echo CHtml::submitButton('Login'); ?>
-    </div>
-
-    <?php $this->endWidget(); ?>
-
-    <div class="row buttons">
-        <?php echo CHtml::link('Register',$this->createUrl('user/register')); ?>
-    </div>
-</div><!-- form -->
+<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Login', 'type'=>'primary', 'size'=>'normal')); ?>
+<?php $this->endWidget(); ?>

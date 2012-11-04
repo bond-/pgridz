@@ -37,6 +37,7 @@ return array(
     'components'=>array(
         'bootstrap'=>array(
             'class'=>'ext.bootstrap.components.Bootstrap',
+            'responsiveCss'=>true,
         ),
         'mail' => array(
             'class' => 'YiiMail',
