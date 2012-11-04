@@ -20,6 +20,8 @@
 <?php echo $form->passwordFieldRow($model,'password'); ?>
 
 <?php echo $form->checkBoxRow($model,'rememberMe'); ?>
-
-<?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Login', 'type'=>'primary', 'size'=>'normal')); ?>
+<div class="btn-toolbar">
+    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Login', 'type'=>'primary', 'size'=>'normal')); ?>
+    <?php $this->widget('bootstrap.widgets.TbButton', array('label'=>'Register','type'=>'primary','buttonType'=>'link','size'=>'normal','url'=>$this->createUrl('user/register'),)); ?>
+</div>
 <?php $this->endWidget(); ?>
