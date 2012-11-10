@@ -52,7 +52,7 @@ class SiteController extends Controller
             $this->render('index',array('model'=>$model,'newUser'=>$newUser,'forgotPasswordForm'=>$forgotPasswordForm));
         }
         else{
-            $this->redirect(array('user/index'));
+            $this->redirect(array('contact/index'));
         }
 	}
 
