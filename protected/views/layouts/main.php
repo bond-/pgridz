@@ -50,13 +50,11 @@
 	<?php endif?>
 
 	<?php echo $content; ?>
-
-    <footer class="footer navbar-fixed-bottom">
+    <hr/>
+    <footer>
         <div class="container-fluid">
             <p class="muted credit">
-                Copyright &copy; <?php echo date('Y'); ?> by Powergridz.com<br/>
-                All Rights Reserved.<br/>
-                <?php echo Yii::powered(); ?>
+                Copyright &copy; <?php echo date('Y'); ?> by Powergridz.com | All Rights Reserved | <?php echo Yii::powered(); ?>
             </p>
         </div>
     </footer><!-- footer -->
