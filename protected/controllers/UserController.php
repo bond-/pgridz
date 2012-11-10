@@ -32,7 +32,7 @@ class UserController extends Controller
                 'users'=>array('*'),
             ),
             array('allow', // allow authenticated user to perform the below listed actions
-                'actions'=>array('index','updatePassword','updateProfile','view','renderPartialView'),
+                'actions'=>array('index','updatePassword','updateProfile','view','renderPartialView','renderPartialEdit'),
                 'users'=>array('@'),
             ),
             /*array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -284,10 +284,11 @@ class UserController extends Controller
         $profileForm = $this->loadModel($id);
         $this->renderPartial('_view', array('profileForm'=>$profileForm,'tabHeader'=>"View"));
     }
+
     public function actionRenderPartialEdit(){
         $id = Yii::app()->user->id;
         $profileForm = $this->loadModel($id);
-        $this->renderPartial('_edit', array('profileForm'=>$profileForm,'tabHeader'=>"View"));
+        $this->renderPartial('_edit', array('profileForm'=>$profileForm,'tabHeader'=>"Edit"));
     }
 
 }

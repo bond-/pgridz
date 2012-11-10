@@ -15,8 +15,8 @@ class UpdatePasswordForm extends CFormModel{
         return array(
             // all fields are required
             array('password, newPassword1, newPassword2', 'required'),
-            array('password', 'authenticate'),
             array('newPassword2', 'compare', 'compareAttribute'=>'newPassword1'),
+            array('password', 'authenticate'),
         );
     }
 

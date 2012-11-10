@@ -22,7 +22,7 @@
     $("a[href='#yw1_tab_3']").click(function() {
         $.ajax({
             type: 'GET',
-            url: '<?php echo Yii::app()->createAbsoluteUrl("user/renderPartialView"); ?>',
+            url: '<?php echo Yii::app()->createAbsoluteUrl("user/renderPartialEdit"); ?>',
             success:function(data){
                 $('#viewProfile').html(data);
             },

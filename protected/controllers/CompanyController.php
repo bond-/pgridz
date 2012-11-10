@@ -2,11 +2,6 @@
 
 class CompanyController extends Controller
 {
-	/**
-	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
-	 * using two-column layout. See 'protected/views/layouts/column2.php'.
-	 */
-	public $layout='//layouts/column2';
 
 	/**
 	 * @return array action filters
@@ -28,7 +23,7 @@ class CompanyController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform the below listed actions
-				'actions'=>array('index','view','create','update','admin','delete'),
+				'actions'=>array('index','view','create','update','admin','delete','list'),
 				'users'=>array('@'),
 			),
 			array('deny',  // deny all users
@@ -136,6 +131,25 @@ class CompanyController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
+	}
+
+    /**
+	 * Fetches JSON data
+	 */
+	public function actionList()
+	{
+        $criteria = new CDbCriteria;
+        $criteria->compare('lower(name)',strtolower($_GET['name']),true);
+        $criteria->limit = 8;
+        $criteria->order = 'name asc';
+        $records = Company::model()->with(array('user'=>array('joinType'=>'INNER JOIN','condition'=>'user.id='.Yii::app()->user->id)))->findAll($criteria);
+        if(!isset($records))
+            $records = array();
+        $names = array();
+        foreach($records as $value){
+            array_push($names,$value->name);
+        }
+		echo CJSON::encode($names);
 	}
 
 	/**

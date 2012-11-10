@@ -6,7 +6,7 @@ class ContactController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/main';
 
 	/**
 	 * @return array action filters
@@ -28,7 +28,7 @@ class ContactController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform the below listed actions
-				'actions'=>array('index','view','create','update','admin','delete'),
+				'actions'=>array('index','view','create','update','admin','delete','list'),
 				'users'=>array('@'),
 			),
 			array('deny',  // deny all users
@@ -121,10 +121,34 @@ class ContactController extends Controller
 	{
         $criteria = new CDbCriteria;
         $criteria->compare('user_id',Yii::app()->user->id);
-		$dataProvider=new CActiveDataProvider('Contact',array('criteria'=>$criteria));
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+        $contact=new Contact;
+        $loggedInUserId = Yii::app()->user->id;
+        $contact->user_id = $loggedInUserId;
+        $company = new Company;
+        $contacts = Contact::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
+        $companies = Company::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
+
+        // Uncomment the following line if AJAX validation is needed
+        $this->performAjaxValidation($contact);
+        $this->performAjaxValidation($company);
+
+        if(isset($_POST['Contact']))
+        {
+            $contact->attributes=$_POST['Contact'];
+            $company->attributes= $_POST['Company'];
+            $companyName = $company->name;
+            $company = Company::model()->findByAttributes(array('name'=>$company->name,'user_id'=>$loggedInUserId));
+            if(!isset($company)){
+                $company = new Company;
+                $company->name = $companyName;
+                $company->user_id = Yii::app()->user->id;
+                $company->save();
+            }
+            $contact->company_id = $company->id;
+            if($contact->save())
+                $this->redirect(array('view','id'=>$contact->id));
+        }
+		$this->render('index',array('contact'=>$contact,'company'=>$company,'contacts'=>$contacts,'companies'=>$companies));
 	}
 
 	/**
@@ -141,6 +165,30 @@ class ContactController extends Controller
 			'model'=>$model,
 		));
 	}
+
+    /**
+     * Fetches JSON data
+     */
+    public function actionList()
+    {
+        $results = array();
+        $criteria = new CDbCriteria;
+        $field = strtolower($_GET['field']);
+        if($field!='id'){
+            $criteria->addSearchCondition('user_id',Yii::app()->user->id);
+            $criteria->compare('lower('. $field .')',strtolower($_GET['query']),true);
+            $criteria->limit = 8;
+            $criteria->order = $field.' asc';
+        }
+        $records = Contact::model()->findAll($criteria);
+
+        if(!isset($records))
+            $records = array();
+        foreach($records as $value){
+            array_push($results,$value->$field);
+        }
+        echo CJSON::encode($results);
+    }
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
