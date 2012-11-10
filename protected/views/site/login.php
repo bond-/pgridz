@@ -158,25 +158,39 @@
             }
         })
     }
+    //Sends an ajax post request to controller
     function createProfileJS()
     {
+        showLoading();
         if($("#user-form").validate().form()){
+            showLoading();
             var data=$("#user-form").serialize();
             $.ajax({
                 type: 'POST',
                 url: '<?php echo Yii::app()->createAbsoluteUrl("user/register"); ?>',
                 data:data,
                 success:function(data){
-                    $("#register-close").click();
+                    hideLoading();
+                    resetRegistrationForm();
                     jQuery.notify("Congratulations..!! You have successfully registered. Please verify email.", "success", {timeout: 0});
                 },
                 error: function(data) { // if error occured
-                    jQuery.notify("Unable to create a new account..!! Please try again.", "error", {timeout: 5});
+                    hideLoading();
+                    if(data.status==406){
+                        jQuery.notify("User already exists", "error", {timeout: 0});
+                    }else if(data.status==503){
+                        jQuery.notify("Unable to send an email now. Please verify your email address by login", "error", {timeout: 0});
+                    }else{
+                        resetRegistrationForm();
+                        jQuery.notify("Unable to create a new account..!! Please try again.", "error", {timeout: 0});
+                    }
                 }
             });
-            $("#user-form").trigger("reset");
         }
-
+    }
+    function resetRegistrationForm(){
+        $("#register-close").click();
+        $("#user-form").trigger("reset");
     }
     //validate User registration form
     function validateForgotPasswordForm(){
@@ -193,30 +207,38 @@
             }
         })
     }
+    //Sends an ajax post request to controller
     function sendEmailForPasswordResetJS()
     {
         var formFP = $("#forgot-password-form");
         if($("#forgot-password-form").validate().form()){
+            showLoading();
             var data=$(formFP).serialize();
             $.ajax({
                 type: 'POST',
                 url: '<?php echo Yii::app()->createAbsoluteUrl("user/forgotPassword"); ?>',
                 data:data,
                 success:function(data){
+                    hideLoading();
+                    resetForgotPasswordForm();
                     jQuery.notify("An email is sent to your email address to reset your password", "success", {timeout: 0});
                 },
                 error: function(data) { // if error occured
-                    if(data.status==500){
+                    hideLoading();
+                   if(data.status==500){
                         jQuery.notify("User doesn't exit", "error", {timeout: 5});
-                    }else{
+                    }else if(data.status==503){
+                       jQuery.notify("Unable to update password..!! Please try again.", "error", {timeout: 5});
+                   }else{
+                       resetForgotPasswordForm();
                         jQuery.notify("Unable to update password..!! Please try again.", "error", {timeout: 5});
                     }
-
                 }
             });
-            $("#forgot-password-close").click();
-            $("#user-form").trigger("reset");
         }
-
+    }
+    function resetForgotPasswordForm(){
+        $("#forgot-password-close").click();
+        $("#forgot-password-close").trigger("reset");
     }
 </script>

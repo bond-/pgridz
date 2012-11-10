@@ -15,8 +15,27 @@
         Yii::app()->baseUrl.'/css/jquery.notify.css','screen,projection');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/jquery.notify.js');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/jquery.validate.js');
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/overlay-loading.js');
     ?>
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
+
+    <script type="text/javascript">
+        var loadingCount = 0;
+        function showLoading()
+        {
+            loadingCount++;
+            if(loadingCount==1)
+                jQuery('body').CenterImage({ path:"<?php echo Yii::app()->request->baseUrl; ?>/images/spinner.gif",overlayColor: '#000', opacity: 0.0, zindex: 99999,overflow: 'hidden'});
+        }
+
+        function  hideLoading()
+        {
+            loadingCount--;
+            if(loadingCount==0)
+                jQuery('body').CenterImage('remove');
+        }
+    </script>
+
 </head>
 
 <body>

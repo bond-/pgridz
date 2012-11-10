@@ -96,15 +96,18 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     function updatePasswordJS()
     {
         if($("#update-password-form").validate().form()){
+            showLoading();
             var data=$("#update-password-form").serialize();
             $.ajax({
                 type: 'POST',
                 url: '<?php echo Yii::app()->createAbsoluteUrl("user/updatePassword"); ?>',
                 data:data,
                 success:function(data){
+                    hideLoading();
                     jQuery.notify("Password updated successfully", "success", {timeout: 0});
                 },
                 error: function(data) { // if error occured
+                    hideLoading();
                     if(data.status==400){
                         jQuery.notify("Current password is not correct", "error", {timeout: 0});
                     }else{

@@ -44,8 +44,8 @@ return array(
             'transportType' => 'smtp',
             'transportOptions' => array(
                 'host'=>'smtp.gmail.com',
-                'username'=>'xxxxxx@gmail.com',
-                'password'=>'xxxxxx',
+                'username'=>'se.pulse.sridhar@gmail.com',
+                'password'=>'welcome2sridhar',
                 'port'=>'587',
                 'encryption'=>'tls'
             ),
@@ -84,7 +84,7 @@ return array(
             'connectionString' => 'mysql:host=localhost;dbname=pgridz',
             'emulatePrepare' => true,
             'username' => 'root',
-            'password' => '123456',
+            'password' => '123',
             'charset' => 'utf8',
         ),
         'errorHandler'=>array(
@@ -112,6 +112,6 @@ return array(
     // using Yii::app()->params['paramName']
     'params'=>array(
         // this is used in contact page
-        'adminEmail'=>'webmaster@example.com',
+        'adminEmail'=>"support@powergridz.com",
     ),
 );
