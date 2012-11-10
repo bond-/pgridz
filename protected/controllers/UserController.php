@@ -317,7 +317,7 @@ class UserController extends Controller
                 $user = $this->loadModel($user_id);
                 $user->account_locked = false;
                 $user->save();
-                //$registrationCode->delete();
+                $registrationCode->delete();
                 // commit transactions now
                 $transaction->commit();
                 return $user;
