@@ -10,6 +10,12 @@
     <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <?php
+    Yii::app()->clientScript->registerCssFile(
+        Yii::app()->baseUrl.'/css/jquery.notify.css','screen,projection');
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/jquery.notify.js');
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/jquery.validate.js');
+    ?>
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 

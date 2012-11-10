@@ -26,7 +26,7 @@ class UpdatePasswordForm extends CFormModel{
     public function attributeLabels()
     {
         return array(
-            'currentPassword'=>'Current password',
+            'password'=>'Current password',
             'newPassword1'=>'New password',
             'newPassword2'=>'Reenter new password',
         );
@@ -38,8 +38,7 @@ class UpdatePasswordForm extends CFormModel{
      */
     public function authenticate($attribute,$params)
     {
-        if(!$this->hasErrors())
-        {
+        if(!$this->hasErrors()){
             $_identity=new UserIdentity(Yii::app()->user->name,$this->password);
             if(!$_identity->authenticate())
                 $this->addError('password','Incorrect password');

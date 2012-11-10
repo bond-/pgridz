@@ -1,28 +1,33 @@
-<?php
-/* @var $this UserController */
-/* @var $model User */
-
-$this->breadcrumbs=array(
-	'My Profile'
-);
-
-$this->menu=array(
-	array('label'=>'Update Profile', 'url'=>array('update')),
-    array('label'=>'Update Password', 'url'=>array('updatePassword')),
-);
-?>
-
-<h1>My Profile</h1>
-
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'email',
-		'city',
-		'state',
-		'country',
-		'zip',
-		'join_date',
-		'end_date',
-	),
+<?php $this->widget('bootstrap.widgets.TbTabs', array(
+    'tabs'=>$this->getTabularFormTabs(),
 )); ?>
+
+<script type="text/javascript">
+    $("a[href^='#yw1']").click(function() {
+        $("div[class='error']").remove();
+        $("input[id*='_']").removeClass("error");
+        $("#update-password-form").trigger("reset");
+    });
+    $("a[href='#yw1_tab_2']").click(function() {
+        $.ajax({
+            type: 'GET',
+            url: '<?php echo Yii::app()->createAbsoluteUrl("user/renderPartialView"); ?>',
+            success:function(data){
+                $('#viewProfile').html(data);
+            },
+            error: function(data) { // if error occured
+            }
+        });
+    });
+    $("a[href='#yw1_tab_3']").click(function() {
+        $.ajax({
+            type: 'GET',
+            url: '<?php echo Yii::app()->createAbsoluteUrl("user/renderPartialView"); ?>',
+            success:function(data){
+                $('#viewProfile').html(data);
+            },
+            error: function(data) { // if error occured
+            }
+        });
+    });
+</script>

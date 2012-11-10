@@ -28,6 +28,8 @@ class SiteController extends Controller
 	public function actionIndex()
 	{
         $model=new LoginForm;
+        $newUser=new RegistrationForm();
+        $forgotPasswordForm=new ForgotPasswordForm();
 
         // if it is ajax validation request
         if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
@@ -46,10 +48,12 @@ class SiteController extends Controller
         }
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-        if(Yii::app()->user->isGuest)
-		    $this->render('index',array('model'=>$model));
-        else
+        if(Yii::app()->user->isGuest){
+            $this->render('index',array('model'=>$model,'newUser'=>$newUser,'forgotPasswordForm'=>$forgotPasswordForm));
+        }
+        else{
             $this->redirect(array('user/index'));
+        }
 	}
 
 	/**

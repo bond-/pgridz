@@ -52,9 +52,10 @@ class User extends CActiveRecord
 			array('email, password, city, state, country, zip', 'length', 'max'=>255),
             array('join_date, end_date', 'date', 'format'=>'mm/dd/yyyy'),
 			array('end_date', 'safe'),
+			array('account_locked', 'boolean'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, email, password, city, state, country, zip, join_date, end_date', 'safe', 'on'=>'search'),
+			array('id, email, password, city, state, country, zip, join_date, end_date,account_locked', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -99,6 +100,7 @@ class User extends CActiveRecord
 			'zip' => 'Zip',
 			'join_date' => 'Join Date',
 			'end_date' => 'End Date',
+            'account_locked'=>'Account Locked'
 		);
 	}
 
@@ -122,6 +124,7 @@ class User extends CActiveRecord
 		$criteria->compare('zip',$this->zip,true);
 		$criteria->compare('join_date',$this->join_date,true);
 		$criteria->compare('end_date',$this->end_date,true);
+		$criteria->compare('account_locked',$this->account_locked,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

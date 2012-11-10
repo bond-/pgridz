@@ -1,10 +1,6 @@
 <?php
 /* @var $this UserController */
 /* @var $model User */
-
-$this->breadcrumbs=array(
-	'Register',
-);
 ?>
 
 <h1>Register</h1>

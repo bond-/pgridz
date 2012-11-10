@@ -1,11 +1,13 @@
 <?php
 /* @var $this SiteController */
 /* @var $model LoginForm */
+/* @var $forgotPasswordForm ForgotPasswordForm */
+/* @var $newUser RegistrationForm */
 
 $this->pageTitle=Yii::app()->name;
 ?>
 <div class="row-fluid">
-    <div class="span8">
+    <div class="span9">
         <div class="hero-unit">
             <h3>Network like a Professional. For FREE!</h3>
             <ul>
@@ -14,9 +16,20 @@ $this->pageTitle=Yii::app()->name;
                 <li>Print your company notes to help remember details during BankWeeks, on-campus visit sessions etc.</li>
                 <li>Many more features coming soon! <?php echo CHtml::link('Suggest new features to better serve your needs.',array('/site/contact'));?></li>
             </ul>
+            <br/><br/>
+            <?php echo "New to Pgridz? "?>
+            <?php $this->widget('bootstrap.widgets.TbButton', array(
+            'label'=>'Create account',
+            'type'=>'info',
+            'htmlOptions'=>array(
+                'data-toggle'=>'modal',
+                'data-target'=>'#userRegistrationModal',
+                'onclick'=> '$("#user-form").trigger("reset")',
+            ),));
+            ?>
         </div>
     </div>
-    <div class="span4">
-        <?php $this->renderPartial('login',array('model'=>$model)); ?>
+    <div class="span3">
+        <?php $this->renderPartial('login',array('model'=>$model,'newUser'=>$newUser,'forgotPasswordForm'=>$forgotPasswordForm)); ?>
     </div>
 </div>

@@ -36,7 +36,7 @@ class ContactForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-            'body'=>'Your suggestion/comment',
+            'body'=>'Suggestion/comment',
 			'verifyCode'=>'Verification Code',
 		);
 	}
