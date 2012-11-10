@@ -41,6 +41,7 @@ class RegistrationCode extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('user_id, token, dateCreated', 'required'),
+			array('user_id', 'unique'),
 			array('user_id', 'numerical', 'integerOnly'=>true),
 			array('token', 'length', 'max'=>255),
 			// The following rule is used by search().
