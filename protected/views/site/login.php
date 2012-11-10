@@ -17,9 +17,9 @@
 
 <p class="note">Fields with <span class="required">*</span> are required.</p>
 
-<?php echo $form->textFieldRow($model,'email'); ?>
+<?php echo $form->textFieldRow($model,'email',array('class'=>'span12')); ?>
 
-<?php echo $form->passwordFieldRow($model,'password'); ?>
+<?php echo $form->passwordFieldRow($model,'password',array('class'=>'span12')); ?>
 
 <?php echo $form->checkBoxRow($model,'rememberMe'); ?>
 <div class="btn-toolbar">
