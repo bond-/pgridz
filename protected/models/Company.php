@@ -41,6 +41,8 @@ class Company extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
+			array('user_id', 'required'),
+			array('name', 'uniqueRecord'),
 			array('user_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
@@ -92,4 +94,11 @@ class Company extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    public function uniqueRecord(){
+        $record = Company::model()->with(array('user'=>array('joinType'=>'INNER JOIN','condition'=>'user.id='.$this->user_id)))->findByAttributes(array('name'=>$this->name));
+        if(isset($record)){
+            $this->addError('name','A company with this name has already been registered');
+        }
+    }
 }
