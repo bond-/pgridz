@@ -225,12 +225,11 @@ class UserController extends Controller
     public function getTabularFormTabs()
     {
         $tabs = array();
-        $count = 0;
         $id = Yii::app()->user->id;
         $profileForm = $this->loadModel($id);
         $updateForm = new UpdatePasswordForm();
         $tabs[] = array(
-            'active'=>(++$count) === 0,
+            'active'=>true,
             'label'=>"Update password",
             'content'=>$this->renderPartial('_updatePassword', array('updateForm'=>$updateForm,'id'=>'updatePasswordFormId','tabHeader'=>"Update password"), true),
         );
