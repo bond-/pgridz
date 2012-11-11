@@ -1,6 +1,6 @@
 <?php
 
-class ContactController extends Controller
+class ContactController extends RestController
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -28,7 +28,7 @@ class ContactController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform the below listed actions
-				'actions'=>array('index','view','create','update','admin','delete','list'),
+				'actions'=>array('index','view','create','update','admin','delete','list','export'),
 				'users'=>array('@'),
 			),
 			array('deny',  // deny all users
@@ -129,8 +129,7 @@ class ContactController extends Controller
         $companies = Company::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
 
         // Uncomment the following line if AJAX validation is needed
-        $this->performAjaxValidation($contact);
-        $this->performAjaxValidation($company);
+        //$this->performAjaxValidation($contact);
 
         if(isset($_POST['Contact']))
         {
@@ -146,7 +145,9 @@ class ContactController extends Controller
             }
             $contact->company_id = $company->id;
             if($contact->save())
-                $this->redirect(array('view','id'=>$contact->id));
+                $this->sendResponse(200);
+            else
+                $this->sendResponse(400);
         }
 		$this->render('index',array('contact'=>$contact,'company'=>$company,'contacts'=>$contacts,'companies'=>$companies));
 	}

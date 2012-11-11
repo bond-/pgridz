@@ -25,15 +25,15 @@ $this->breadcrumbs=array(
                     <div class="accordion-inner">
                         <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                         'id'=>'contact-form',
-                        'enableAjaxValidation'=>true,
                         'enableClientValidation'=>true,
                         'clientOptions'=>array(
                             'validateOnSubmit'=>true,
+                            'afterValidate' => 'js:afterValidate',
                         ),
                     )); ?>
 
                         <p class="text-info">Fields with <span class="required">*</span> are required.</p>
-                        <label class="required" for="Company[name]"><?php echo CHtml::encode($company->getAttributeLabel('name'))?><span class="required">*</span></label>
+                        <label class="required" for="Company[name]"><?php echo CHtml::encode($company->getAttributeLabel('name'))?> <span class="required">*</span></label>
                         <?php $this->widget('bootstrap.widgets.TbTypeahead', array(
                         'model'=>$company,'attribute'=>'name','htmlOptions'=>array('class'=>'span12','autocomplete'=>'off'),
                         'options'=>array(
@@ -42,6 +42,8 @@ $this->breadcrumbs=array(
                             'matcher'=>"js:function(item) {return ~item.toLowerCase().indexOf(this.query.toLowerCase());}",
                         ),
                     )); ?>
+                        <?php echo $form->error($company,'name'); ?>
+
                         <?php echo $form->textFieldRow($contact,'name',array('maxlength'=>255,'class'=>'span12')); ?>
                         <label class="required" for="Contact[title]"><?php echo CHtml::encode($contact->getAttributeLabel('title'))?></label>
                         <?php $this->widget('bootstrap.widgets.TbTypeahead', array(
@@ -62,6 +64,7 @@ $this->breadcrumbs=array(
                             'matcher'=>"js:function(item) {return ~item.toLowerCase().indexOf(this.query.toLowerCase());}",
                         ),
                     )); ?>
+                        <?php echo $form->error($contact,'group_division'); ?>
 
                         <label class="required" for="Contact[city]"><?php echo CHtml::encode($contact->getAttributeLabel('city'))?></label>
                         <?php $this->widget('bootstrap.widgets.TbTypeahead', array(
@@ -72,6 +75,7 @@ $this->breadcrumbs=array(
                             'matcher'=>"js:function(item) {return ~item.toLowerCase().indexOf(this.query.toLowerCase());}",
                         ),
                     )); ?>
+                        <?php echo $form->error($contact,'city'); ?>
 
                         <label class="required" for="Contact[country]"><?php echo CHtml::encode($contact->getAttributeLabel('country'))?></label>
                         <?php $this->widget('bootstrap.widgets.TbTypeahead', array(
@@ -82,6 +86,7 @@ $this->breadcrumbs=array(
                             'matcher'=>"js:function(item) {return ~item.toLowerCase().indexOf(this.query.toLowerCase());}",
                         ),
                     )); ?>
+                        <?php echo $form->error($contact,'country'); ?>
 
                         <?php echo $form->textFieldRow($contact,'phone',array('maxlength'=>255,'class'=>'span12')); ?>
                         <?php echo $form->textFieldRow($contact,'email',array('maxlength'=>255,'class'=>'span12')); ?>
@@ -94,6 +99,7 @@ $this->breadcrumbs=array(
                             'matcher'=>"js:function(item) {return ~item.toLowerCase().indexOf(this.query.toLowerCase());}",
                         ),
                     )); ?>
+                        <?php echo $form->error($contact,'school'); ?>
                         <?php echo $form->textAreaRow($contact,'notes',array('rows'=>6, 'cols'=>50,'class'=>'span12')); ?>
                         <?php echo $form->textAreaRow($contact,'questions_to_ask',array('rows'=>6, 'cols'=>50,'class'=>'span12')); ?>
                         <?php echo $form->radioButtonListRow($contact,'iq',array(
@@ -112,7 +118,12 @@ $this->breadcrumbs=array(
                     ),array('separator'=>"",'class'=>'input-medium'))?>
 
                         <div class="btn-toolbar "></div>
-                        <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Submit', 'type'=>'primary', 'size'=>'normal',)); ?>
+                        <?php $this->widget('bootstrap.widgets.TbButton', array(
+                            'buttonType'=>'submit',
+                            'label'=>'Submit',
+                            'type'=>'primary',
+                            'size'=>'normal',
+                         )); ?>
                         <?php $this->endWidget(); ?>
                     </div>
                 </div>
@@ -141,3 +152,22 @@ $this->breadcrumbs=array(
         <h4>Analysis</h4>
     </div>
 </div>
+<script type="text/javascript">
+    function afterValidate(form, data, hasError){
+        if (!hasError) {
+            $.ajax({
+                url: $(form).action,
+                type: 'POST',
+                dataType: 'json',
+                data:$(form).serialize()
+            })
+                    .done(function ( response ) {
+                        $.notify("You have successfully added a contact","success");
+                    })
+                    .fail(function ( xhr, status ) {
+                        $.notify("Adding new contact failed","error");
+                    });
+            return false;
+        }
+    }
+</script>
