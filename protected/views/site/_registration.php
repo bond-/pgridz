@@ -89,26 +89,23 @@
     //Sends an ajax post request to controller
     function createProfileJS()
     {
-        if($("#user-form").validate().form()){
-            showLoading();
-            var data=$("#user-form").serialize();
+        var userForm = $("#user-form");
+        if(userForm.validate().form()){
+            var data=userForm.serialize();
             $.ajax({
                 type: 'POST',
                 url: '<?php echo Yii::app()->createAbsoluteUrl("user/register"); ?>',
                 data:data,
+                beforeSend:resetRegistrationForm,
                 success:function(data){
-                    hideLoading();
-                    resetRegistrationForm();
                     jQuery.notify("Congratulations..!! You have successfully registered. Please verify email.", "success", {timeout: 0});
                 },
                 error: function(data) { // if error occured
-                    hideLoading();
                     if(data.status==406){
                         jQuery.notify("User already exists", "error", {timeout: 0});
                     }else if(data.status==503){
                         jQuery.notify("Unable to send an email now. Please verify your email address by login", "error", {timeout: 0});
                     }else{
-                        resetRegistrationForm();
                         jQuery.notify("Unable to create a new account..!! Please try again.", "error", {timeout: 0});
                     }
                 }

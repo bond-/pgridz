@@ -67,19 +67,17 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
     function updateProfileJS()
     {
-        if($("#profile-update-form").validate().form()){
-            showLoading();
-            var data=$("#profile-update-form").serialize();
+        var update = $("#profile-update-form");
+        if(update.validate().form()){
+            var data=update.serialize();
             $.ajax({
                 type: 'POST',
                 url: '<?php echo Yii::app()->createAbsoluteUrl("user/updateProfile"); ?>',
                 data:data,
                 success:function(data){
-                    hideLoading();
                     jQuery.notify("Profile updated successfully", "success", {timeout: 0});
                 },
                 error: function(data) { // if error occured
-                    hideLoading();
                     jQuery.notify("Unable to update profile. Please try again", "error", {timeout: 0});
                 }
             });

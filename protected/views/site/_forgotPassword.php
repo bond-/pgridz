@@ -61,27 +61,23 @@
     //Sends an ajax post request to controller
     function sendEmailForPasswordResetJS()
     {
-        var formFP = $("#forgot-password-form");
-        if($("#forgot-password-form").validate().form()){
-            showLoading();
-            var data=$(formFP).serialize();
+        var fpForm = $("#forgot-password-form");
+        if(fpForm.validate().form()){
+            var data=$(fpForm).serialize();
             $.ajax({
                 type: 'POST',
                 url: '<?php echo Yii::app()->createAbsoluteUrl("user/forgotPassword"); ?>',
                 data:data,
+                beforeSend:resetForgotPasswordForm,
                 success:function(data){
-                    hideLoading();
-                    resetForgotPasswordForm();
                     jQuery.notify("An email is sent to your email address to reset your password", "success", {timeout: 0});
                 },
                 error: function(data) { // if error occured
-                    hideLoading();
                     if(data.status==500){
                         jQuery.notify("User doesn't exit", "error", {timeout: 5});
                     }else if(data.status==503){
                         jQuery.notify("Unable to update password..!! Please try again.", "error", {timeout: 5});
                     }else{
-                        resetForgotPasswordForm();
                         jQuery.notify("Unable to update password..!! Please try again.", "error", {timeout: 5});
                     }
                 }
@@ -90,6 +86,6 @@
     }
     function resetForgotPasswordForm(){
         $("#forgot-password-close").click();
-        $("#forgot-password-close").trigger("reset");
+        $("#forgot-password-form").trigger("reset");
     }
 </script>
