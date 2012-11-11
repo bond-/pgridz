@@ -84,7 +84,7 @@ class UserController extends Controller
                 try{
                     $message = new YiiMailMessage;
                     $message->view = 'verifyRegistrationEmail';
-                    $message->subject = "New account";
+                    $message->subject = "Welcome to ".CHtml::encode(Yii::app()->name);
                     //userModel is passed to the view
                     $message->setBody(array(
                             'link'=>Yii::app()->createAbsoluteUrl("user/verifyRegistration",array('t'=>$token))),
@@ -230,7 +230,7 @@ class UserController extends Controller
         $profileForm = $this->loadModel($id);
         $updateForm = new UpdatePasswordForm();
         $tabs[] = array(
-            'active'=>$count++ === 0,
+            'active'=>(++$count) === 0,
             'label'=>"Update password",
             'content'=>$this->renderPartial('_updatePassword', array('updateForm'=>$updateForm,'id'=>'updatePasswordFormId','tabHeader'=>"Update password"), true),
         );
@@ -384,7 +384,10 @@ class UserController extends Controller
      */
     private function generateVerificationCode($id){
         //clear any old tokens
-        RegistrationCode::model()->findByAttributes(array('user_id'=>$id))->delete();
+        $oldRecord = RegistrationCode::model()->findByAttributes(array('user_id' => $id));
+        if(isset($oldRecord))
+            $oldRecord->delete();
+
         $registrationCode = new RegistrationCode();
         $registrationCode->token = md5( uniqid());
         $registrationCode->dateCreated = gmdate("d/m/Y");
