@@ -21,7 +21,7 @@ If you did make the request, then click the following link to have your password
 ----<br/>
 Regards<br/>
 
-Pgridz team
+<?php echo CHtml::encode(Yii::app()->name)?> team
 
 
 

@@ -6,12 +6,12 @@ Your password has been reset to following text. Please update once login into sy
 <br/><br/>
 <b><?php echo $password?></b>
 <br/><br/>
-To login please visit: <a href="<?php echo Yii::app()->createAbsoluteUrl("");?>">PGridz</a>
+To login please visit: <a href="<?php echo Yii::app()->createAbsoluteUrl("");?>"><?php echo CHtml::encode(Yii::app()->name)?></a>
 <br/><br/><br/>
 
 ----<br/>
 Regards
 <br/>
-Pgridz team
+<?php echo CHtml::encode(Yii::app()->name)?> team
 
 
