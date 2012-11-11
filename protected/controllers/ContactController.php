@@ -267,7 +267,7 @@ class ContactController extends RestController
         $pdf->setPrintFooter(false);
         $pdf->AddPage();
 
-        $pdf->writeHTML('<h1>'.Yii::app()->name.'</h1><br/><br/>', true, false, false, false, '');
+        $pdf->writeHTML('<h1>'.Yii::app()->name.'</h1><br/><br/><h2>Exported by: '.CHtml::encode(Yii::app()->user->name).'</h2><br/>', true, false, false, false, '');
 
         $pdf->writeHTML($this->getPDFContent($companyId), true, false, false, false, '');
 
@@ -283,8 +283,9 @@ class ContactController extends RestController
         foreach($companies as $company){
             $contacts=Contact::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id,'company_id'=>$company->id));
             if(!sizeof($contacts)==0){
+                $companyName = CHtml::encode($company->name);
                 $tblHead = <<<EOD
-                <h1>Company : $company->name</h1>
+                <h2>Company : $companyName</h2>
             <table cellspacing="0" cellpadding="1" border="1">
                 <tr>
                     <th>Name</th>
@@ -307,20 +308,32 @@ EOD;
 EOD;
                 $tblBody ='';
                 foreach($contacts as $it){
+                    $name = CHtml::encode($it->name);
+                    $title = CHtml::encode($it->title);
+                    $group_division = CHtml::encode($it->group_division);
+                    $city = CHtml::encode($it->city);
+                    $country = CHtml::encode($it->country);
+                    $phone = CHtml::encode($it->phone);
+                    $email = CHtml::encode($it->email);
+                    $school = CHtml::encode($it->school);
+                    $notes = CHtml::encode($it->notes);
+                    $questions_to_ask = CHtml::encode($it->questions_to_ask);
+                    $iq = CHtml::encode($it->getDisplayIqLabel($it->iq));
+                    $like = CHtml::encode($it->getDisplayLikeLabel($it->c_like));
                     $tblBody .= <<<EOD
                 <tr>
-                    <td>$it->name</td>
-                    <td>$it->title</td>
-                    <td>$it->group_division</td>
-                    <td>$it->city</td>
-                    <td>$it->country</td>
-                    <td>$it->phone</td>
-                    <td>$it->email</td>
-                    <td>$it->school</td>
-                    <td>$it->notes</td>
-                    <td>$it->questions_to_ask</td>
-                    <td>$it->iq</td>
-                    <td>$it->c_like</td>
+                    <td>$name</td>
+                    <td>$title</td>
+                    <td>$group_division</td>
+                    <td>$city</td>
+                    <td>$country</td>
+                    <td>$phone</td>
+                    <td>$email</td>
+                    <td>$school</td>
+                    <td>$notes</td>
+                    <td>$questions_to_ask</td>
+                    <td>$iq</td>
+                    <td>$like</td>
                 </tr>
 EOD;
                 }
