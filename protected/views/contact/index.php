@@ -130,44 +130,41 @@ $this->breadcrumbs=array(
             </div>
         </div>
     </div>
-    <div class="span3 well">
-        <h4>My Contacts</h4>
-        <ul>
-            <?php
-                foreach($contacts as $it){
-                    echo "<li>".$it->name."</li>";
-                }
-            ?>
-        </ul>
-    </div>
-    <div class="span3 well">
-        <h4>My Companies</h4>
-        <?php
-        foreach($companies as $it){
-            echo "<li>".$it->name."</li>";
-        }
-        ?>
-    </div>
-    <div class="span3 well">
-        <h4>Analysis</h4>
-    </div>
+    <div id="contacts" class="span3 well"></div>
+    <div id="companies" class="span3 well"></div>
+    <div id="analysis" class="span3 well"></div>
 </div>
 <script type="text/javascript">
+    $(document).ready(function(){updateDivs()});
     function afterValidate(form, data, hasError){
         if (!hasError) {
+            var _form = $(form);
             $.ajax({
-                url: $(form).action,
+                url: _form.action,
                 type: 'POST',
                 dataType: 'json',
-                data:$(form).serialize()
+                data:_form.serialize()
             })
                     .done(function ( response ) {
+                        _form.trigger('reset');
+                        updateDivs();
                         $.notify("You have successfully added a contact","success");
                     })
                     .fail(function ( xhr, status ) {
                         $.notify("Adding new contact failed","error");
                     });
             return false;
+        }
+    }
+    function updateDivs(companyId){
+        if(companyId){
+            $('#companies').load("<?php echo $this->createUrl('contact/viewPartial');?>",{id:companyId,view:'companies'});
+            $('#contacts').load("<?php echo $this->createUrl('contact/viewPartial');?>",{id:companyId,view:'contacts'});
+            $('#analysis').load("<?php echo $this->createUrl('contact/viewPartial');?>",{id:companyId,view:'analysis'});
+        }else{
+            $('#companies').load("<?php echo $this->createUrl('contact/viewPartial');?>",{view:'companies'});
+            $('#contacts').load("<?php echo $this->createUrl('contact/viewPartial');?>",{view:'contacts'});
+            $('#analysis').load("<?php echo $this->createUrl('contact/viewPartial');?>",{view:'analysis'});
         }
     }
 </script>

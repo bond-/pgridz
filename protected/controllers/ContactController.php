@@ -28,7 +28,7 @@ class ContactController extends RestController
 	{
 		return array(
 			array('allow', // allow authenticated user to perform the below listed actions
-				'actions'=>array('index','view','create','update','admin','delete','list','export'),
+				'actions'=>array('index','view','create','update','admin','delete','list','export','viewPartial'),
 				'users'=>array('@'),
 			),
 			array('deny',  // deny all users
@@ -125,8 +125,6 @@ class ContactController extends RestController
         $loggedInUserId = Yii::app()->user->id;
         $contact->user_id = $loggedInUserId;
         $company = new Company;
-        $contacts = Contact::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
-        $companies = Company::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
 
         // Uncomment the following line if AJAX validation is needed
         //$this->performAjaxValidation($contact);
@@ -149,8 +147,33 @@ class ContactController extends RestController
             else
                 $this->sendResponse(400);
         }
-		$this->render('index',array('contact'=>$contact,'company'=>$company,'contacts'=>$contacts,'companies'=>$companies));
+		$this->render('index',array('contact'=>$contact,'company'=>$company,));
 	}
+
+    public function actionViewPartial(){
+        if(isset($_POST['view'])){
+            $view = $_POST['view'];
+            $data = array();
+            $attributes = array('user_id' => Yii::app()->user->id);
+            if($view=="contacts"){
+                if(isset($_POST['id'])){
+                    $attributes['company_id']=(int)($_POST['id']);
+                }
+                $data = Contact::model()->findAllByAttributes($attributes);
+            }elseif($view=="companies"){
+                if(isset($_POST['id'])){
+                    $attributes['id']=(int)($_POST['id']);
+                }
+                $data = Company::model()->findAllByAttributes($attributes);
+            }elseif($view=="analysis"){
+                if(isset($_POST['id']))
+                    $data = array('id'=>(int)($_POST['id']));
+            }
+            $this->renderPartial('_'.$view,array($view=>$data));
+        }else{
+            $this->sendResponse(400);
+        }
+    }
 
 	/**
 	 * Manages all models.
