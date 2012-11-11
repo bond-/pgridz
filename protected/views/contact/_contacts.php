@@ -1,8 +1,9 @@
 <?php
 /* @var $this ContactController */
 /* @var $contacts Contact[] */
+
+echo "<h4>".CHtml::link('My Contacts','javascript:updateDivs(); ')."</h4>";
 ?>
-<h4>My Contacts</h4>
 <ul>
     <?php
     foreach($contacts as $it){

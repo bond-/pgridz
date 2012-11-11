@@ -4,8 +4,10 @@
 ?>
 
 <?php
-echo "<h4>".CHtml::link('My Companies','#',array('onclick'=>'updateDivs()'))."</h4>";
+echo "<h4>".CHtml::link('My Companies','javascript:updateDivs();')."</h4>";
+echo "<ul>";
 foreach($companies as $it){
-    echo "<li>".CHtml::link($it->name,'#',array('onclick'=>'updateDivs('.$it->id.')'))."</li>";
+    echo "<li>".CHtml::link($it->name,'javascript:updateDivs('.$it->id.');')."</li>";
 }
+echo "</ul>";
 ?>

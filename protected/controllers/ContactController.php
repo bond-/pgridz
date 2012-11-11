@@ -177,7 +177,10 @@ class ContactController extends RestController
                 $data = Company::model()->findAllByAttributes($attributes);
             }elseif($view=="analysis"){
                 if(isset($_POST['id']))
-                    $data = array('id'=>(int)($_POST['id']));
+                    $data['id']=(int)($_POST['id']);
+                $data['smartest'] = array('sort'=>'iq','order'=>'desc');
+                $data['likable'] = array('sort'=>'c_like','order'=>'desc');
+                $data['combo'] = array('sort'=>array('iq','c_like'),'order'=>'desc');
             }
             $this->renderPartial('_'.$view,array($view=>$data));
         }else{
@@ -269,19 +272,26 @@ class ContactController extends RestController
 
         $pdf->writeHTML('<h1>'.Yii::app()->name.'</h1><br/><br/><h2>Exported by: '.CHtml::encode(Yii::app()->user->name).'</h2><br/>', true, false, false, false, '');
 
-        $pdf->writeHTML($this->getPDFContent($companyId), true, false, false, false, '');
+        $pdf->writeHTML($this->getPDFContent($companyId,$_GET['sort'],$_GET['order']), true, false, false, false, '');
 
         $pdf->Output("contacts-export-".gmdate("d-m-Y").".pdf", "I");
 
     }
 
-    private function getPDFContent($companyId){
+    private function getPDFContent($companyId,$sort,$order){
 
         $companies = isset($companyId)?array(Company::model()->findByAttributes(array('user_id'=>Yii::app()->user->id,'id'=>$companyId))):
             Company::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
         $content = '';
         foreach($companies as $company){
-            $contacts=Contact::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id,'company_id'=>$company->id));
+            $criteria = new CDbCriteria;
+            $criteria->addColumnCondition(array('user_id'=>Yii::app()->user->id,'company_id'=>$company->id));
+            if(is_array($sort)){
+                $criteria->order = '(IFNULL('.$sort[0].',0)+IFNULL('.$sort[1].',0)) '.$order;
+            }else{
+                $criteria->order = $sort.' '.$order;
+            }
+            $contacts=Contact::model()->findAll($criteria);
             if(!sizeof($contacts)==0){
                 $companyName = CHtml::encode($company->name);
                 $tblHead = <<<EOD
