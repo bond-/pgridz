@@ -3,8 +3,8 @@
 /* @var $companies Company[] */
 ?>
 
-<h4>My Companies</h4>
 <?php
+echo "<h4>".CHtml::link('My Companies','#',array('onclick'=>'updateDivs()'))."</h4>";
 foreach($companies as $it){
     echo "<li>".CHtml::link($it->name,'#',array('onclick'=>'updateDivs('.$it->id.')'))."</li>";
 }
