@@ -383,6 +383,8 @@ class UserController extends Controller
      * @return string
      */
     private function generateVerificationCode($id){
+        //clear any old tokens
+        RegistrationCode::model()->findByAttributes(array('user_id'=>$id))->delete();
         $registrationCode = new RegistrationCode();
         $registrationCode->token = md5( uniqid());
         $registrationCode->dateCreated = gmdate("d/m/Y");
