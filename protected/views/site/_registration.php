@@ -98,9 +98,11 @@
                 data:data,
                 beforeSend:resetRegistrationForm,
                 success:function(data){
+                    hideLoading();
                     jQuery.notify("Congratulations..!! You have successfully registered. Please verify email.", "success", {timeout: 0});
                 },
                 error: function(data) { // if error occured
+                    hideLoading();
                     if(data.status==406){
                         jQuery.notify("User already exists", "error", {timeout: 0});
                     }else if(data.status==503){
@@ -113,6 +115,7 @@
         }
     }
     function resetRegistrationForm(){
+        showLoading();
         $("#register-close").click();
         $("#user-form").trigger("reset");
     }

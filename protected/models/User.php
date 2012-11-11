@@ -13,6 +13,7 @@
  * @property string $zip
  * @property string $join_date
  * @property string $end_date
+ * @property boolean $account_locked
  *
  * The followings are the available model relations:
  * @property Contact[] $contacts
@@ -130,6 +131,10 @@ class User extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    public function getAccountLocked(){
+        return $this->account_locked==1;
+    }
 
     public function behaviors()
     {

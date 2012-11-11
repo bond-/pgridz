@@ -7,21 +7,6 @@
 $this->pageTitle=Yii::app()->name;
 ?>
 
-<?php if(Yii::app()->user->hasFlash('success')): ?>
-<div class="flash-success">
-    <script type="text/javascript">
-        jQuery.notify("<?php echo Yii::app()->user->getFlash('success') ?>", "success", {timeout: 0});
-    </script>
-</div>
-<?php endif; ?>
-<?php if(Yii::app()->user->hasFlash('error')): ?>
-<div class="flash-success">
-    <script type="text/javascript">
-        jQuery.notify("<?php echo Yii::app()->user->getFlash('error') ?>", "error", {timeout: 0});
-    </script>
-</div>
-<?php endif; ?>
-
 <div class="row-fluid">
     <div class="span9">
         <div class="hero-unit">

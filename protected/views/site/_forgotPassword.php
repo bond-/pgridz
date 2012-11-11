@@ -70,9 +70,11 @@
                 data:data,
                 beforeSend:resetForgotPasswordForm,
                 success:function(data){
+                    hideLoading();
                     jQuery.notify("An email is sent to your email address to reset your password", "success", {timeout: 0});
                 },
                 error: function(data) { // if error occured
+                    hideLoading();
                     if(data.status==500){
                         jQuery.notify("User doesn't exit", "error", {timeout: 5});
                     }else if(data.status==503){
@@ -85,6 +87,7 @@
         }
     }
     function resetForgotPasswordForm(){
+        showLoading();
         $("#forgot-password-close").click();
         $("#forgot-password-form").trigger("reset");
     }

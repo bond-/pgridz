@@ -43,6 +43,15 @@ class UserController extends Controller
                 'actions'=>array('generateVerificationCode','verify','generatePassword'),
                 'users'=>array('*'),
             ),
+            array('deny',
+                'actions'=>array('sendVerificationEmail'),
+                'expression'=>'!User::model()->findByPk(Yii::app()->user->id)->getAccountLocked()',
+            ),
+            array('allow',
+                'actions'=>array('sendVerificationEmail'),
+                'users'=>array('@'),
+                'expression'=>'User::model()->findByPk(Yii::app()->user->id)->getAccountLocked()',
+            )
         );
     }
 
@@ -248,15 +257,25 @@ class UserController extends Controller
             $token = $_GET['t'];
             $user = $this->actionVerify($token);
             if($user!=null){
-                Yii::app()->user->setFlash('success','Verification is successful. Please login to continue');
-                $this->redirect(array('site/index'));
+                $message = 'You have successfully verified your e-mail'.(Yii::app()->user->isGuest?'. Please login to continue':'');
+                Yii::app()->user->setFlash('success',$message);
+                if(!Yii::app()->user->isGuest)
+                    $this->redirect(array('contact/index'));
+                else
+                    $this->redirect(array('site/index'));
             }else{
                 Yii::app()->user->setFlash('error','Verification is un-successful. Invalid code');
-                $this->redirect(array('site/index'));
+                if(!Yii::app()->user->isGuest)
+                    $this->redirect(array('user/view'));
+                else
+                    $this->redirect(array('site/index'));
             }
         }else{
             Yii::app()->user->setFlash('error','Verification is un-successful. Invalid code');
-            $this->redirect(array('site/index'));
+            if(!Yii::app()->user->isGuest)
+                $this->redirect(array('user/view'));
+            else
+                $this->redirect(array('site/index'));
         }
     }
 
@@ -374,6 +393,26 @@ class UserController extends Controller
         $id = Yii::app()->user->id;
         $profileForm = $this->loadModel($id);
         $this->renderPartial('_edit', array('profileForm'=>$profileForm,'tabHeader'=>"Edit"));
+    }
+
+    public function actionSendVerificationEmail(){
+        $user = User::model()->findByPk(Yii::app()->user->id);
+        $token = $this->generateVerificationCode($user->id);
+        try{
+            $message = new YiiMailMessage;
+            $message->view = 'verifyRegistrationEmail';
+            $message->subject = "Welcome to ".CHtml::encode(Yii::app()->name);
+            //userModel is passed to the view
+            $message->setBody(array(
+                    'link'=>Yii::app()->createAbsoluteUrl("user/verifyRegistration",array('t'=>$token))),
+                'text/html');
+            $message->addTo($user->email);
+            $message->from = Yii::app()->params['adminEmail'];
+            Yii::app()->mail->send($message);
+            $this->sendResponse(200);
+        }catch (Exception $e){
+            $this->sendResponse(503);
+        }
     }
 
     /**

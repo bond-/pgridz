@@ -28,8 +28,9 @@ class ContactController extends RestController
     {
         return array(
             array('allow', // allow authenticated user to perform the below listed actions
-                'actions'=>array('index','view','create','update','export','admin','delete','list','viewPartial'),
+                'actions'=>array('index','view','update','export','viewPartial','list'),
                 'users'=>array('@'),
+                'expression'=>'!User::model()->findByPk(Yii::app()->user->id)->getAccountLocked()',
             ),
             array('deny',  // deny all users
                 'users'=>array('*'),

@@ -21,10 +21,38 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            // unblock when ajax activity stops
-            $(document).ajaxStop($.unblockUI);
-            $(document).ajaxStart($.blockUI);
+        <?php if(Yii::app()->user->hasFlash('success')): ?>
+            $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('success') ?>", "success", {timeout: 0});});
+            <?php endif; ?>
+        <?php if(Yii::app()->user->hasFlash('error')): ?>
+            $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('error') ?>", "error", {timeout: 0});});
+            <?php endif; ?>
         });
+        <?php if(!Yii::app()->user->isGuest && User::model()->findByPk(Yii::app()->user->id)->getAccountLocked()):?>
+            function sendVerificationMail(){
+                $.ajax('<?php echo $this->createUrl('/user/sendVerificationEmail')?>',{
+                    beforeSend:showLoading,
+                    success:function(){
+                        hideLoading();
+                        jQuery.notify("Email has been sent successfully", "success", {timeout: 0})
+                    },
+                    error:function(data){
+                        hideLoading();
+                        if(data.status==403){
+                            jQuery.notify("You are not authorized to perform this action", "warning", {timeout: 0})
+                        }else{
+                            jQuery.notify("Unable to send email now, please try again later", "error", {timeout: 0})
+                        }
+                    }
+                });
+            }
+            <?php endif; ?>
+        function showLoading(){
+            $.blockUI();
+        }
+        function hideLoading(){
+            $.unblockUI();
+        }
     </script>
 
 </head>
@@ -42,7 +70,7 @@
             'items'=>array(
                 array('label'=>'Home', 'url'=>array('/site/index'),'visible'=>Yii::app()->user->isGuest),
                 array('label'=>'About Us', 'url'=>array('/site/page', 'view'=>'about'),'visible'=>Yii::app()->user->isGuest),
-                array('label'=>'Contacts', 'url'=>array('/contact/index'),'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>'Contacts', 'url'=>array('/contact/index'),'visible'=>(!Yii::app()->user->isGuest && !User::model()->findByPk(Yii::app()->user->id)->getAccountLocked())),
                 array('label'=>'My Profile', 'url'=>array('/user/view'),'visible'=>!Yii::app()->user->isGuest),
                 array('label'=>'Suggestion/Comment', 'url'=>array('/site/contact')),
             ),
@@ -63,8 +91,13 @@
 			'links'=>$this->breadcrumbs,
 		)); ?><!-- breadcrumbs -->
 	<?php endif?>
-
-	<?php echo $content; ?>
+    <?php if(!Yii::app()->user->isGuest && User::model()->findByPk(Yii::app()->user->id)->getAccountLocked()):?>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Warning!</strong> Please verify your email to access advanced features. Click <a href="javascript:sendVerificationMail()">here</a> to send verification email.
+    </div>
+    <?php endif?>
+    <?php echo $content; ?>
     <hr/>
     <footer>
         <div class="container-fluid">

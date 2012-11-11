@@ -158,6 +158,7 @@ $this->breadcrumbs=array(
         }
     }
     function updateDivs(companyId){
+        showLoading();
         if(companyId){
             $('#companies').load("<?php echo $this->createUrl('contact/viewPartial');?>",{id:companyId,view:'companies'});
             $('#contacts').load("<?php echo $this->createUrl('contact/viewPartial');?>",{id:companyId,view:'contacts'});
@@ -167,5 +168,6 @@ $this->breadcrumbs=array(
             $('#contacts').load("<?php echo $this->createUrl('contact/viewPartial');?>",{view:'contacts'});
             $('#analysis').load("<?php echo $this->createUrl('contact/viewPartial');?>",{view:'analysis'});
         }
+        hideLoading();
     }
 </script>

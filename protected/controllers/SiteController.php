@@ -50,8 +50,9 @@ class SiteController extends Controller
 		// using the default layout 'protected/views/layouts/main.php'
         if(Yii::app()->user->isGuest){
             $this->render('index',array('model'=>$model,'newUser'=>$newUser,'forgotPasswordForm'=>$forgotPasswordForm));
-        }
-        else{
+        }else if(User::model()->findByPk(Yii::app()->user->id)->account_locked){
+            $this->redirect(array('user/view'));
+        }else{
             $this->redirect(array('contact/index'));
         }
 	}
