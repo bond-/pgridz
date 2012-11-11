@@ -15,7 +15,7 @@ class m121109_182406_registration_code_table extends CDbMigration
         ),'ENGINE=InnoDB');
         $this->addForeignKey('fk_user_rc','registration_code','user_id','user','id','cascade','cascade');
 
-        $this->addColumn('user','account_locked','boolean DEFAULT 0');
+        $this->addColumn('user','account_locked','boolean DEFAULT 1');
 	}
 
 	public function safeDown()
