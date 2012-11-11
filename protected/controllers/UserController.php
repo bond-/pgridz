@@ -270,8 +270,9 @@ class UserController extends Controller
             $user = $this->actionVerify($token);
             if($user!=null){
                 $generatedPassword = $this->generatePassword();
-                $user->password=Yii::app()->hasher->hashPassword($generatedPassword);
-                $user->save();
+                $dbUser = $this->loadModel($user->id);
+                $dbUser->password=Yii::app()->hasher->hashPassword($generatedPassword);;
+                $dbUser->save();
                 try{
                     $message = new YiiMailMessage;
                     $message->view = 'passwordReset';
