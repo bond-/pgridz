@@ -23,10 +23,11 @@
 
 <?php echo $form->checkBoxRow($model,'rememberMe'); ?>
 <div class="btn-toolbar">
-    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Login', 'type'=>'primary', 'size'=>'normal')); ?>
+    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'label'=>'Login', 'type'=>'primary', 'size'=>'small')); ?>
     <?php $this->widget('bootstrap.widgets.TbButton', array(
     'label'=>'Forgot password',
     'type'=>'primary',
+    'size'=>'small',
     'htmlOptions'=>array(
         'data-toggle'=>'modal',
         'data-target'=>'#forgotPasswordModal',

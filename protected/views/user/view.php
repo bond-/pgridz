@@ -1,4 +1,10 @@
-<?php $this->widget('bootstrap.widgets.TbTabs', array(
+<?php
+$this->breadcrumbs=array(
+    'Users'=>array('index'),
+    'My Profile',
+);
+
+$this->widget('bootstrap.widgets.TbTabs', array(
     'tabs'=>$this->getTabularFormTabs(),
 )); ?>
 
