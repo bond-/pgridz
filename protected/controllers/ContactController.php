@@ -81,22 +81,34 @@ class ContactController extends RestController
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
-        $companies = Company::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
+		$contact = $this->loadModel($id);
+        $loggedInUserId = Yii::app()->user->id;
+        $company = $contact->company;
 
 		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+		//$this->performAjaxValidation($model);
 
 		if(isset($_POST['Contact']))
 		{
-			$model->attributes=$_POST['Contact'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+            $contact->attributes=$_POST['Contact'];
+            $companyName = $_POST['Company']['name'];
+            $company = Company::model()->findByAttributes(array('name'=> $companyName,'user_id'=>$loggedInUserId));
+            if(!isset($company)){
+                $company = new Company;
+                $company->name = $companyName;
+                $company->user_id = $loggedInUserId;
+                $company->save();
+            }
+            $contact->company_id = $company->id;
+            if($contact->save())
+                $this->sendResponse(200);
+            else
+                $this->sendResponse(400,$companyName);
 		}
 
 		$this->render('update',array(
-			'model'=>$model,
-			'companies'=>$companies,
+			'contact'=>$contact,
+			'company'=>$company,
 		));
 	}
 
@@ -119,8 +131,6 @@ class ContactController extends RestController
 	 */
 	public function actionIndex()
 	{
-        $criteria = new CDbCriteria;
-        $criteria->compare('user_id',Yii::app()->user->id);
         $contact=new Contact;
         $loggedInUserId = Yii::app()->user->id;
         $contact->user_id = $loggedInUserId;

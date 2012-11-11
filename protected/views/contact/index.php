@@ -117,13 +117,14 @@ $this->breadcrumbs=array(
                         4=>'Love you',
                     ),array('separator'=>"",'class'=>'input-medium'))?>
 
-                        <div class="btn-toolbar "></div>
-                        <?php $this->widget('bootstrap.widgets.TbButton', array(
+                        <div class="btn-toolbar ">
+                            <?php $this->widget('bootstrap.widgets.TbButton', array(
                             'buttonType'=>'submit',
-                            'label'=>'Submit',
+                            'label'=>'Create',
                             'type'=>'primary',
                             'size'=>'normal',
-                         )); ?>
+                        )); ?>
+                        </div>
                         <?php $this->endWidget(); ?>
                     </div>
                 </div>
@@ -140,7 +141,7 @@ $this->breadcrumbs=array(
         if (!hasError) {
             var _form = $(form);
             $.ajax({
-                url: _form.action,
+                url: _form.attr('action'),
                 type: 'POST',
                 dataType: 'json',
                 data:_form.serialize()

@@ -1,22 +1,28 @@
 <?php
 /* @var $this ContactController */
-/* @var $model Contact */
-/* @var $companies Company[] */
+/* @var $contact Contact */
+/* @var $company Company */
 
 $this->breadcrumbs=array(
 	'Contacts'=>array('index'),
-	$model->name=>array('view','id'=>$model->id),
+	$contact->name=>array('view','id'=>$contact->id),
 	'Update',
 );
 
 $this->menu=array(
 	array('label'=>'List Contact', 'url'=>array('index')),
 	array('label'=>'Create Contact', 'url'=>array('create')),
-	array('label'=>'View Contact', 'url'=>array('view', 'id'=>$model->id)),
+	array('label'=>'View Contact', 'url'=>array('view', 'id'=>$contact->id)),
 	array('label'=>'Manage Contact', 'url'=>array('admin')),
 );
 ?>
-
-<h1>Update Contact: <?php echo $model->name; ?></h1>
-
-<?php echo $this->renderPartial('_form', array('model'=>$model,'companies'=>$companies)); ?>
+<div class="row-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>Updating Contact: <?php echo $contact->name; ?></h3>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <?php echo $this->renderPartial('_form', array('contact'=>$contact,'company'=>$company,)); ?>
+    </div>
+</div>
