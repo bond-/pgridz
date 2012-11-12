@@ -22,6 +22,10 @@ class CompanyController extends Controller
 	public function accessRules()
 	{
 		return array(
+            array('allow', // allow authenticated user to perform the below listed actions
+                'actions'=>array('list'),
+                'users'=>array('@'),
+            ),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
