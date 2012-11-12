@@ -14,7 +14,8 @@
     Yii::app()->clientScript->registerCssFile(
         Yii::app()->baseUrl.'/css/jquery.notify.css','screen,projection');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/jquery.notify.js');
-    Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/jquery.validate.js');
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/jquery.validate-1.10.js');
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/additional-methods-1.10.js');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/jquery.blockUI.js');
     ?>
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
