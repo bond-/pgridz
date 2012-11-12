@@ -329,8 +329,8 @@ EOD;
                     $school = CHtml::encode($it->school);
                     $notes = CHtml::encode($it->notes);
                     $questions_to_ask = CHtml::encode($it->questions_to_ask);
-                    $iq = CHtml::encode($it->getDisplayIqLabel($it->iq));
-                    $like = CHtml::encode($it->getDisplayLikeLabel($it->c_like));
+                    $iq = CHtml::encode(isset($it->iq)?$it->iq:'-');
+                    $like = CHtml::encode(isset($it->c_like)?$it->c_like:'-');
                     $tblBody .= <<<EOD
                 <tr>
                     <td>$name</td>
