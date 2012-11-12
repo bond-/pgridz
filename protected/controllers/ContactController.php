@@ -170,12 +170,12 @@ class ContactController extends RestController
                 if(isset($_POST['id'])){
                     $attributes['company_id']=(int)($_POST['id']);
                 }
-                $data = Contact::model()->findAllByAttributes($attributes);
+                $data = Contact::model()->findAllByAttributes($attributes,array('order'=>'name asc'));
             }elseif($view=="companies"){
                 if(isset($_POST['id'])){
                     $attributes['id']=(int)($_POST['id']);
                 }
-                $data = Company::model()->findAllByAttributes($attributes);
+                $data = Company::model()->findAllByAttributes($attributes,array('order'=>'name asc'));
             }elseif($view=="analysis"){
                 if(isset($_POST['id']))
                     $data['id']=(int)($_POST['id']);
