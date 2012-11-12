@@ -3,7 +3,7 @@
 /* @var $form TbActiveForm  */
 ?>
 
-<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id'=>'forgotPasswordModal')); ?>
+<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id'=>'forgotPasswordModal','events'=>array('hidden'=>'js:resetForgotPasswordForm'))); ?>
 <div class="modal-header">
     <a class="close" id ="forgot-password-close" data-dismiss="modal">&times;</a>
     <h4>Forgot password..??</h4>
@@ -45,10 +45,27 @@
     });
     //validate User registration form
     function validateForgotPasswordForm(){
+        jQuery.validator.addMethod(
+                "userNotExists",
+                function(value, element) {
+                    var condition = false;
+                    $.ajax('<?php echo $this->createUrl('user/exists')?>',{
+                        async:false,
+                        data:{email:value},
+                        success:function(){condition=false;},
+                        error:function(data){condition=true;}
+                    });
+                    return !condition;
+                },
+                "No user exists with this email"
+        );
         $("#forgot-password-form").validate({
+            onkeyup: false,
             rules: {
                 'ForgotPasswordForm[email]': {
-                    required: true
+                    required: true,
+                    email: true,
+                    userNotExists: true
                 }
             },
             messages: {
@@ -68,7 +85,7 @@
                 type: 'POST',
                 url: '<?php echo Yii::app()->createAbsoluteUrl("user/forgotPassword"); ?>',
                 data:data,
-                beforeSend:resetForgotPasswordForm,
+                beforeSend:function(){showLoading();resetForgotPasswordForm();},
                 success:function(data){
                     hideLoading();
                     jQuery.notify("An email is sent to your email address to reset your password", "success", {timeout: 0});
@@ -87,8 +104,10 @@
         }
     }
     function resetForgotPasswordForm(){
-        showLoading();
         $("#forgot-password-close").click();
-        $("#forgot-password-form").trigger("reset");
+        var fpForm = $("#forgot-password-form");
+        fpForm.trigger("reset");
+        fpForm.validate().resetForm();
+        fpForm.find("input").removeClass('error');
     }
 </script>

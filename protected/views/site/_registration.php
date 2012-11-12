@@ -4,7 +4,7 @@
 ?>
 
 <!--Registration block-->
-<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id'=>'userRegistrationModal')); ?>
+<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id'=>'userRegistrationModal','events'=>array('hidden'=>'js:resetRegistrationForm'))); ?>
 <div class="modal-header">
     <a class="close" id ="register-close" data-dismiss="modal">&times;</a>
     <h4>Registration</h4>
@@ -60,10 +60,27 @@
                 },
                 "Password 2 doesn't match with password"
         );
+        jQuery.validator.addMethod(
+                "userExists",
+                function(value, element) {
+                    var condition = false;
+                    $.ajax('<?php echo $this->createUrl('user/exists')?>',{
+                        async:false,
+                        data:{email:value},
+                        success:function(){condition=false;},
+                        error:function(data){condition=true;}
+                    });
+                    return condition;
+                },
+                "A user already exists with this email"
+        );
         $("#user-form").validate({
+            onkeyup: false,
             rules: {
                 'RegistrationForm[email]': {
-                    required: true
+                    required: true,
+                    email:true,
+                    userExists:true
                 },
                 'RegistrationForm[password]': {
                     required: true
@@ -96,7 +113,7 @@
                 type: 'POST',
                 url: '<?php echo Yii::app()->createAbsoluteUrl("user/register"); ?>',
                 data:data,
-                beforeSend:resetRegistrationForm,
+                beforeSend:function(){showLoading();resetRegistrationForm();},
                 success:function(data){
                     hideLoading();
                     jQuery.notify("Congratulations..!! You have successfully registered. Please verify email.", "success", {timeout: 0});
@@ -115,23 +132,10 @@
         }
     }
     function resetRegistrationForm(){
-        showLoading();
         $("#register-close").click();
-        $("#user-form").trigger("reset");
-    }
-    //validate User registration form
-    function validateForgotPasswordForm(){
-        $("#forgot-password-form").validate({
-            rules: {
-                'ForgotPasswordForm[email]': {
-                    required: true
-                }
-            },
-            messages: {
-                'ForgotPasswordForm[email]':{
-                    required: "Email is required"
-                }
-            }
-        })
+        var userForm = $('#user-form');
+        userForm.trigger("reset");
+        userForm.validate().resetForm();
+        userForm.find("input").removeClass('error');
     }
 </script>

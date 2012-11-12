@@ -1,6 +1,6 @@
 <?php
 
-class ContactController extends RestController
+class ContactController extends Controller
 {
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning

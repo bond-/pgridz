@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'register' action
-                'actions'=>array('register','forgotPassword','verifyRegistration','verifyResetPassword'),
+                'actions'=>array('register','forgotPassword','verifyRegistration','verifyResetPassword','exists'),
                 'users'=>array('*'),
             ),
             array('allow', // allow authenticated user to perform the below listed actions
@@ -393,6 +393,20 @@ class UserController extends Controller
         $id = Yii::app()->user->id;
         $profileForm = $this->loadModel($id);
         $this->renderPartial('_edit', array('profileForm'=>$profileForm,'tabHeader'=>"Edit"));
+    }
+
+    //To check if the user exists or not
+    public function actionExists(){
+        if(isset($_GET['email'])){
+            $user = User::model()->findAllByAttributes(array('email'=>$_GET['email']));
+            if(isset($user) && sizeof($user)>0){
+                $this->sendResponse(200);
+            }else{
+                $this->sendResponse(404);
+            }
+        }else{
+            $this->sendResponse(404);
+        }
     }
 
     public function actionSendVerificationEmail(){
