@@ -158,16 +158,17 @@ $this->breadcrumbs=array(
         }
     }
     function updateDivs(companyId){
-        showLoading();
         if(companyId){
             $('#companies').load("<?php echo $this->createUrl('contact/viewPartial');?>",{id:companyId,view:'companies'});
             $('#contacts').load("<?php echo $this->createUrl('contact/viewPartial');?>",{id:companyId,view:'contacts'});
             $('#analysis').load("<?php echo $this->createUrl('contact/viewPartial');?>",{id:companyId,view:'analysis'});
         }else{
+            $('#companies').html('<img src ="<?php echo Yii::app()->baseUrl."/images/busy.gif"?>" alt="loading">');
+            $('#contacts').html('<img src ="<?php echo Yii::app()->baseUrl."/images/busy.gif"?>" alt="loading">');
+            $('#analysis').html('<img src ="<?php echo Yii::app()->baseUrl."/images/busy.gif"?>" alt="loading">');
             $('#companies').load("<?php echo $this->createUrl('contact/viewPartial');?>",{view:'companies'});
             $('#contacts').load("<?php echo $this->createUrl('contact/viewPartial');?>",{view:'contacts'});
             $('#analysis').load("<?php echo $this->createUrl('contact/viewPartial');?>",{view:'analysis'});
         }
-        hideLoading();
     }
 </script>
