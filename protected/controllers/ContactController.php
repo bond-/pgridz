@@ -282,7 +282,7 @@ class ContactController extends RestController
     private function getPDFContent($companyId,$sort,$order){
 
         $companies = isset($companyId)?array(Company::model()->findByAttributes(array('user_id'=>Yii::app()->user->id,'id'=>$companyId))):
-            Company::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id));
+            Company::model()->findAllByAttributes(array('user_id'=>Yii::app()->user->id),array('order'=>'name asc'));
         $content = '';
         foreach($companies as $company){
             $criteria = new CDbCriteria;
