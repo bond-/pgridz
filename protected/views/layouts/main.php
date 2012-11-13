@@ -25,6 +25,9 @@
         <?php if(Yii::app()->user->hasFlash('success')): ?>
             $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('success') ?>", "success", {timeout: 0});});
             <?php endif; ?>
+        <?php if(Yii::app()->user->hasFlash('warning')): ?>
+            $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('warning') ?>", "warning", {timeout: 0});});
+            <?php endif; ?>
         <?php if(Yii::app()->user->hasFlash('error')): ?>
             $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('error') ?>", "error", {timeout: 0});});
             <?php endif; ?>

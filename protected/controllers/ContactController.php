@@ -375,7 +375,7 @@ EOD;
                     unlink($_FILES["UploadForm"]["tmp_name"]["file"]);
                     $this->sendResponse(400,"Invalid format, Expecting columns: ".PHPExcel_Cell::stringFromColumnIndex(12).", Found ".$highestColumn." columns");
                 }
-                $errorString = array();
+                $errorsArray = array();
                 for ($row = 1; $row <= $highestRow; ++$row) {
                     // Fetch the data of the columns you need
                     $col1 = $objWorksheet->getCellByColumnAndRow(0, $row)->getValue();
@@ -409,11 +409,16 @@ EOD;
                     ));
                     $errors = $contact->getErrors();
                     if(!empty($errors)){
-                        array_push($errorString,"Error in row ".$row.": ".CJSON::encode($contact->getErrors()));
+                        array_push($errorsArray,"Error in row ".$row.": ".CJSON::encode($contact->getErrors()));
                     }
                 }
                 $this->cleanupUploader($objWorksheet);
-                $this->render('upload',array('model'=>$model,'errors'=>$errorString));
+                if(empty($errorsArray)){
+                    Yii::app()->user->setFlash('success','All the contacts have been uploaded successfully');
+                }else{
+                    Yii::app()->user->setFlash('warning','Oops, some contacts failed to upload and are listed below');
+                }
+                $this->render('upload',array('model'=>$model,'errors'=>$errorsArray));
             }else{
                 $this->sendResponse(400,"Error in upload");
             }

@@ -40,10 +40,11 @@
         <?php $this->endWidget(); ?>
     </div>
     <?php if(isset($errors) && !empty($errors)) :?>
-    <div class="span5 well text-error">
+    <div class="span5 well">
+        <p class="alert alert-info">Note: Apart from the errors listed below, others have been uploaded successfully</p>
         <h4>Errors in upload</h4>
         <?php
-        echo '<ul>';
+        echo '<ul class="text-error">';
         foreach($errors as $error){
             echo '<li>'.$error.'</li>';
         }
