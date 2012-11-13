@@ -20,7 +20,7 @@ $this->menu=array(
         <h3>Viewing Contact: <?php echo $model->name; ?></h3>
     </div>
     <div class="span5 pull-right">
-        <div class="btn-toolbar">
+        <div class="btn-toolbar pull-right">
             <?php $this->widget('bootstrap.widgets.TbButton', array(
             'label'=>'Edit Contact',
             'type'=>'primary',
@@ -28,10 +28,28 @@ $this->menu=array(
             'url'=>$this->createUrl('/contact/update',array('id'=>$_GET['id'])),
             'buttonType'=>'ajaxButton',
             'icon'=>'icon-pencil icon-white',
-            'htmlOptions'=>array(
-                'class'=>'pull-right',
-            ),
             'ajaxOptions'=>array('update'=>'body'),
+        )); ?>
+            <?php $this->widget('bootstrap.widgets.TbButton', array(
+            'label'=>'Delete',
+            'type'=>'danger',
+            'size'=>'normal',
+            'url'=>$this->createUrl('/contact/delete'),
+            'buttonType'=>'ajaxButton',
+            'icon'=>'icon-trash icon-white',
+            'ajaxOptions'=>array(
+                'type'=>'post',
+                'data'=>array('id'=>$_GET['id']),
+                'beforeSend'=>'js:function(xhr,opts){
+                    if(!confirm("Are you sure?")){
+                        xhr.abort();
+                    }
+                }',
+                'success'=>'js:function(){
+                    $.notify("Contact delete successfully, please wait while we redirect you","success");
+                    setTimeout(function(){window.location = "'.$this->createUrl('/contact/index').'"},2000);
+                }'
+            ),
         )); ?>
         </div>
     </div>

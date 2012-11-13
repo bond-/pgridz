@@ -28,7 +28,7 @@ class ContactController extends Controller
     {
         return array(
             array('allow', // allow authenticated user to perform the below listed actions
-                'actions'=>array('index','view','update','export','viewPartial','list'),
+                'actions'=>array('index','view','update','export','viewPartial','list','upload','delete'),
                 'users'=>array('@'),
                 'expression'=>'!User::model()->findByPk(Yii::app()->user->id)->getAccountLocked()',
             ),
@@ -118,13 +118,13 @@ class ContactController extends Controller
      * If deletion is successful, the browser will be redirected to the 'admin' page.
      * @param integer $id the ID of the model to be deleted
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        $this->loadModel($id)->delete();
-
-        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        $id = $_POST['id'];
+        if(!$this->loadModel($id)->delete()){
+            $this->sendResponse(400);
+        }
+        $this->sendResponse(200);
     }
 
     /**
@@ -353,5 +353,119 @@ EOD;
 
         }
         return $content;
+    }
+
+    /**
+     * For uploading excel files
+     */
+    public function actionUpload(){
+        $model=new UploadForm;
+        if(isset($_FILES['UploadForm']))
+        {
+            $this->loadPHPExcelLibrary();
+            if(!$_FILES['UploadForm']['error']['file']>0){
+                $fileName = $_FILES['UploadForm']['name']['file'];
+                $reader = PHPExcel_IOFactory::createReader($this->getReaderType($fileName));
+                $reader->setReadDataOnly(true);
+                $file = $reader->load($_FILES["UploadForm"]["tmp_name"]["file"]);
+                $objWorksheet = $file->setActiveSheetIndex(0);
+                $highestRow = $objWorksheet->getHighestRow();
+                $highestColumn = $objWorksheet->getHighestColumn();
+                if(strcmp(PHPExcel_Cell::stringFromColumnIndex(12),$highestColumn)!=0){
+                    unlink($_FILES["UploadForm"]["tmp_name"]["file"]);
+                    $this->sendResponse(400,"Invalid format, Expecting columns: ".PHPExcel_Cell::stringFromColumnIndex(12).", Found ".$highestColumn." columns");
+                }
+                $errorString = array();
+                for ($row = 1; $row <= $highestRow; ++$row) {
+                    // Fetch the data of the columns you need
+                    $col1 = $objWorksheet->getCellByColumnAndRow(0, $row)->getValue();
+                    $col2 = $objWorksheet->getCellByColumnAndRow(1, $row)->getValue();
+                    $col3 = $objWorksheet->getCellByColumnAndRow(2, $row)->getValue();
+                    $col4 = $objWorksheet->getCellByColumnAndRow(3, $row)->getValue();
+                    $col5 = $objWorksheet->getCellByColumnAndRow(4, $row)->getValue();
+                    $col6 = $objWorksheet->getCellByColumnAndRow(5, $row)->getValue();
+                    $col7 = $objWorksheet->getCellByColumnAndRow(6, $row)->getValue();
+                    $col8 = $objWorksheet->getCellByColumnAndRow(7, $row)->getValue();
+                    $col9 = $objWorksheet->getCellByColumnAndRow(8, $row)->getValue();
+                    $col10 = $objWorksheet->getCellByColumnAndRow(9, $row)->getValue();
+                    $col11 = $objWorksheet->getCellByColumnAndRow(10, $row)->getValue();
+                    $col12 = $objWorksheet->getCellByColumnAndRow(11, $row)->getValue();
+                    $col13 = $objWorksheet->getCellByColumnAndRow(12, $row)->getValue();
+
+                    $contact = $this->createContact(array(
+                        'companyName'=>$col1,
+                        'name'=>$col2,
+                        'title'=>$col3,
+                        'group_division'=>$col4,
+                        'city'=>$col5,
+                        'country'=>$col6,
+                        'phone'=>$col7,
+                        'email'=>$col8,
+                        'school'=>$col9,
+                        'notes'=>$col10,
+                        'questions_to_ask'=>$col11,
+                        'iq'=>$col12,
+                        'c_like'=>$col13,
+                    ));
+                    $errors = $contact->getErrors();
+                    if(!empty($errors)){
+                        array_push($errorString,"Error in row ".$row.": ".CJSON::encode($contact->getErrors()));
+                    }
+                }
+                $this->cleanupUploader($objWorksheet);
+                $this->render('upload',array('model'=>$model,'errors'=>$errorString));
+            }else{
+                $this->sendResponse(400,"Error in upload");
+            }
+            Yii::app()->end();
+        }
+        $this->render('upload',array('model'=>$model));
+    }
+
+    private function loadPHPExcelLibrary(){
+        // unregister Yii's autoloader
+        spl_autoload_unregister(array('YiiBase', 'autoload'));
+        // register PHPExcel's autoloader ... PHPExcel.php will do it
+        $phpExcelPath = Yii::getPathOfAlias('ext');
+        include($phpExcelPath . DIRECTORY_SEPARATOR . 'PHPExcel.php');
+        // register Yii's autoloader again
+        spl_autoload_register(array('YiiBase', 'autoload'));
+    }
+
+    private function cleanupUploader($worksheet){
+        $worksheet->disconnectCells();
+    }
+
+    private function getReaderType($fileName = ""){
+        $ext = strtolower(end(explode('.',$fileName)));
+        switch($ext){
+            case 'xlsx':
+                return 'Excel2007';
+            case 'ods':
+                return 'OOCalc';
+            case 'xls':
+                return 'Excel5';
+        }
+        return null;
+    }
+
+    private function createContact($params){
+        $user_id = Yii::app()->user->id;
+        $criteria = new CDbCriteria();
+        $criteria->addColumnCondition(array('lower(name)'=>strtolower($params['companyName'])));
+        $criteria->addColumnCondition(array('user_id'=>Yii::app()->user->id));
+        $company = Company::model()->find($criteria);
+        if(!isset($company)){
+            $company = new Company();
+            $company->name = $params['companyName'];
+            $company->user_id = $user_id;
+            $company->save();
+        }
+        $contact = new Contact();
+        $contact->setAttributes($params);
+        $contact->user_id = $user_id;
+        $contact->company_id = $company->id;
+        $contact->save();
+        return $contact;
     }
 }

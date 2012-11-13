@@ -71,7 +71,7 @@
             'items'=>array(
                 array('label'=>'Home', 'url'=>array('/site/index'),'visible'=>Yii::app()->user->isGuest),
                 array('label'=>'About Us', 'url'=>array('/site/page', 'view'=>'about'),'visible'=>Yii::app()->user->isGuest),
-                array('label'=>'Contacts', 'url'=>array('/contact/index'),'visible'=>(!Yii::app()->user->isGuest && !User::model()->findByPk(Yii::app()->user->id)->getAccountLocked())),
+                array('label'=>'Contacts','visible'=>(!Yii::app()->user->isGuest && !User::model()->findByPk(Yii::app()->user->id)->getAccountLocked()),'items'=>array(array('label'=>'Home', 'url'=>array('/contact/index'),),array('label'=>'Upload', 'url'=>array('/contact/upload'),))),
                 array('label'=>'My Profile', 'url'=>array('/user/view'),'visible'=>!Yii::app()->user->isGuest),
                 array('label'=>'Suggestion/Comment', 'url'=>array('/site/contact')),
             ),
