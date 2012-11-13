@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category   PHPExcel
- * @package	PHPExcel_Writer
+ * @package	PHPExcel_Writer_HTML
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version	##VERSION##, ##DATE##
@@ -30,10 +30,10 @@
  * PHPExcel_Writer_HTML
  *
  * @category   PHPExcel
- * @package	PHPExcel_Writer
+ * @package	PHPExcel_Writer_HTML
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
+class PHPExcel_Writer_HTML extends PHPExcel_Writer_Abstract implements PHPExcel_Writer_IWriter {
 	/**
 	 * PHPExcel object
 	 *
@@ -49,18 +49,18 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
 	private $_sheetIndex	= 0;
 
 	/**
-	 * Pre-calculate formulas
-	 *
-	 * @var boolean
-	 */
-	private $_preCalculateFormulas = true;
-
-	/**
 	 * Images root
 	 *
 	 * @var string
 	 */
 	private $_imagesRoot	= '.';
+
+	/**
+	 * embed images, or link to images
+	 *
+	 * @var boolean
+	 */
+	private $_embedImages	= FALSE;
 
 	/**
 	 * Use inline CSS?
@@ -447,6 +447,7 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
 					$html .= '		</tbody>' . PHP_EOL;
 				}
 			}
+			$html .= $this->_extendRowsForChartsAndImages($sheet, $row);
 
 			// Write table footer
 			$html .= $this->_generateTableFooter();
@@ -508,6 +509,56 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
 		return $html;
 	}
 
+	private function _extendRowsForChartsAndImages(PHPExcel_Worksheet $pSheet, $row) {
+		$rowMax = $row;
+		$colMax = 'A';
+		if ($this->_includeCharts) {
+			foreach ($pSheet->getChartCollection() as $chart) {
+				if ($chart instanceof PHPExcel_Chart) {
+				    $chartCoordinates = $chart->getTopLeftPosition();
+				    $chartTL = PHPExcel_Cell::coordinateFromString($chartCoordinates['cell']);
+					$chartCol = PHPExcel_Cell::columnIndexFromString($chartTL[0]);
+					if ($chartTL[1] > $rowMax) {
+						$rowMax = $chartTL[1];
+					}
+					if ($chartCol > PHPExcel_Cell::columnIndexFromString($colMax)) {
+						$colMax = $chartTL[0];
+					}
+				}
+			}
+		}
+
+		foreach ($pSheet->getDrawingCollection() as $drawing) {
+			if ($drawing instanceof PHPExcel_Worksheet_Drawing) {
+			    $imageTL = PHPExcel_Cell::coordinateFromString($drawing->getCoordinates());
+				$imageCol = PHPExcel_Cell::columnIndexFromString($imageTL[0]);
+				if ($imageTL[1] > $rowMax) {
+					$rowMax = $imageTL[1];
+				}
+				if ($imageCol > PHPExcel_Cell::columnIndexFromString($colMax)) {
+					$colMax = $imageTL[0];
+				}
+			}
+		}
+		$html = '';
+		$colMax++;
+		while ($row <= $rowMax) {
+			$html .= '<tr>';
+			for ($col = 'A'; $col != $colMax; ++$col) {
+				$html .= '<td>';
+				$html .= $this->_writeImageInCell($pSheet, $col.$row);
+				if ($this->_includeCharts) {
+					$html .= $this->_writeChartInCell($pSheet, $col.$row);
+				}
+				$html .= '</td>';
+			}
+			++$row;
+			$html .= '</tr>';
+		}
+		return $html;
+	}
+
+
 	/**
 	 * Generate image tag in cell
 	 *
@@ -516,7 +567,7 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
 	 * @return	string
 	 * @throws	PHPExcel_Writer_Exception
 	 */
-	private function _writeImageTagInCell(PHPExcel_Worksheet $pSheet, $coordinates) {
+	private function _writeImageInCell(PHPExcel_Worksheet $pSheet, $coordinates) {
 		// Construct HTML
 		$html = '';
 
@@ -543,7 +594,71 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
 					$filename = htmlspecialchars($filename);
 
 					$html .= PHP_EOL;
-					$html .= '		<img style="position: relative; left: ' . $drawing->getOffsetX() . 'px; top: ' . $drawing->getOffsetY() . 'px; width: ' . $drawing->getWidth() . 'px; height: ' . $drawing->getHeight() . 'px;" src="' . $filename . '" border="0" width="' . $drawing->getWidth() . '" height="' . $drawing->getHeight() . '" />' . PHP_EOL;
+					if ((!$this->_embedImages) || ($this->_isPdf)) {
+						$imageData = $filename;
+					} else {
+						$imageDetails = getimagesize($filename);
+						if ($fp = fopen($filename,"rb", 0)) {
+							$picture = fread($fp,filesize($filename));
+							fclose($fp);
+							// base64 encode the binary data, then break it
+							// into chunks according to RFC 2045 semantics
+							$base64 = chunk_split(base64_encode($picture));
+							$imageData = 'data:'.$imageDetails['mime'].';base64,' . $base64;
+						} else {
+							$imageData = $filename;
+						}
+					}
+
+					$html .= '<div style="position: relative;">';
+					$html .= '<img style="position: absolute; z-index: 1; left: ' . $drawing->getOffsetX() . 'px; top: ' . $drawing->getOffsetY() . 'px; width: ' . $drawing->getWidth() . 'px; height: ' . $drawing->getHeight() . 'px;" src="' . $imageData . '" border="0" />' . PHP_EOL;
+					$html .= '</div>';
+				}
+			}
+		}
+
+		// Return
+		return $html;
+	}
+
+	/**
+	 * Generate chart tag in cell
+	 *
+	 * @param	PHPExcel_Worksheet	$pSheet			PHPExcel_Worksheet
+	 * @param	string				$coordinates	Cell coordinates
+	 * @return	string
+	 * @throws	PHPExcel_Writer_Exception
+	 */
+	private function _writeChartInCell(PHPExcel_Worksheet $pSheet, $coordinates) {
+		// Construct HTML
+		$html = '';
+
+		// Write charts
+		foreach ($pSheet->getChartCollection() as $chart) {
+			if ($chart instanceof PHPExcel_Chart) {
+			    $chartCoordinates = $chart->getTopLeftPosition();
+				if ($chartCoordinates['cell'] == $coordinates) {
+					$chartFileName = PHPExcel_Shared_File::sys_get_temp_dir().'/'.uniqid().'.png';
+					if (!$chart->render($chartFileName)) {
+						return;
+					}
+
+					$html .= PHP_EOL;
+					$imageDetails = getimagesize($chartFileName);
+					if ($fp = fopen($chartFileName,"rb", 0)) {
+						$picture = fread($fp,filesize($chartFileName));
+						fclose($fp);
+						// base64 encode the binary data, then break it
+						// into chunks according to RFC 2045 semantics
+						$base64 = chunk_split(base64_encode($picture));
+						$imageData = 'data:'.$imageDetails['mime'].';base64,' . $base64;
+
+						$html .= '<div style="position: relative;">';
+						$html .= '<img style="position: absolute; z-index: 1; left: ' . $chartCoordinates['xOffset'] . 'px; top: ' . $chartCoordinates['yOffset'] . 'px; width: ' . $imageDetails[0] . 'px; height: ' . $imageDetails[1] . 'px;" src="' . $imageData . '" border="0" />' . PHP_EOL;
+						$html .= '</div>';
+
+						unlink($chartFileName);
+					}
 				}
 			}
 		}
@@ -910,9 +1025,9 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
 				$this->_assembleCSS($this->_cssStyles['table']) : '';
 
 			if ($this->_isPdf && $pSheet->getShowGridLines()) {
-				$html .= '	<table border="1" cellpadding="1" id="sheet' . $sheetIndex . '" cellspacing="4" style="' . $style . '">' . PHP_EOL;
+				$html .= '	<table border="1" cellpadding="1" id="sheet' . $sheetIndex . '" cellspacing="1" style="' . $style . '">' . PHP_EOL;
 			} else {
-				$html .= '	<table border="0" cellpadding="1" id="sheet' . $sheetIndex . '" cellspacing="4" style="' . $style . '">' . PHP_EOL;
+				$html .= '	<table border="0" cellpadding="1" id="sheet' . $sheetIndex . '" cellspacing="0" style="' . $style . '">' . PHP_EOL;
 			}
 		}
 
@@ -1153,7 +1268,12 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
 					$html .= '>';
 
 					// Image?
-					$html .= $this->_writeImageTagInCell($pSheet, $coordinate);
+					$html .= $this->_writeImageInCell($pSheet, $coordinate);
+
+					// Chart?
+					if ($this->_includeCharts) {
+						$html .= $this->_writeChartInCell($pSheet, $coordinate);
+					}
 
 					// Cell data
 					$html .= $cellData;
@@ -1194,26 +1314,6 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
 	}
 
 	/**
-	 * Get Pre-Calculate Formulas
-	 *
-	 * @return boolean
-	 */
-	public function getPreCalculateFormulas() {
-		return $this->_preCalculateFormulas;
-	}
-
-	/**
-	 * Set Pre-Calculate Formulas
-	 *
-	 * @param boolean $pValue	Pre-Calculate Formulas?
-	 * @return PHPExcel_Writer_HTML
-	 */
-	public function setPreCalculateFormulas($pValue = true) {
-		$this->_preCalculateFormulas = $pValue;
-		return $this;
-	}
-
-	/**
 	 * Get images root
 	 *
 	 * @return string
@@ -1230,6 +1330,26 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
 	 */
 	public function setImagesRoot($pValue = '.') {
 		$this->_imagesRoot = $pValue;
+		return $this;
+	}
+
+	/**
+	 * Get embed images
+	 *
+	 * @return boolean
+	 */
+	public function getEmbedImages() {
+		return $this->_embedImages;
+	}
+
+	/**
+	 * Set embed images
+	 *
+	 * @param boolean $pValue
+	 * @return PHPExcel_Writer_HTML
+	 */
+	public function setEmbedImages($pValue = '.') {
+		$this->_embedImages = $pValue;
 		return $this;
 	}
 
