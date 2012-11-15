@@ -237,15 +237,11 @@ class UserController extends Controller
         $id = Yii::app()->user->id;
         $profileForm = $this->loadModel($id);
         $updateForm = new UpdatePasswordForm();
+        $tabs[] = array('active'=>true,'label'=>'Profile','content'=>$this->renderPartial('_view', array('profileForm'=>$profileForm,'tabHeader'=>"View"), true));
         $tabs[] = array(
-            'active'=>true,
             'label'=>"Update password",
             'content'=>$this->renderPartial('_updatePassword', array('updateForm'=>$updateForm,'id'=>'updatePasswordFormId','tabHeader'=>"Update password"), true),
         );
-        $tabs[] = array('label'=>'Profile', 'items'=>array(
-            array('label'=>"View",'content'=>$this->renderPartial('_view', array('profileForm'=>$profileForm,'tabHeader'=>"View"), true)),
-            array('label'=>"Edit",'content'=>$this->renderPartial('_edit', array('profileForm'=>$profileForm,'tabHeader'=>"Edit"), true)),
-        ));
         return $tabs;
     }
 

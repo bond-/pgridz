@@ -13,7 +13,7 @@ $this->widget('bootstrap.widgets.TbTabs', array(
         $("input[id*='_']").removeClass("error");
         $("#update-password-form").trigger("reset");
     });
-    $("a[href='#yw1_tab_2']").click(function() {
+    function renderViewProfileJS(){
         $.ajax({
             type: 'GET',
             url: '<?php echo Yii::app()->createAbsoluteUrl("user/renderPartialView"); ?>',
@@ -23,8 +23,8 @@ $this->widget('bootstrap.widgets.TbTabs', array(
             error: function(data) { // if error occured
             }
         });
-    });
-    $("a[href='#yw1_tab_3']").click(function() {
+    }
+    function renderEditProfileJS(){
         $.ajax({
             type: 'GET',
             url: '<?php echo Yii::app()->createAbsoluteUrl("user/renderPartialEdit"); ?>',
@@ -34,5 +34,5 @@ $this->widget('bootstrap.widgets.TbTabs', array(
             error: function(data) { // if error occured
             }
         });
-    });
+    }
 </script>

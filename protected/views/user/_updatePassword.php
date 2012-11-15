@@ -72,7 +72,8 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                     required: true
                 },
                 'UpdatePasswordForm[newPassword1]': {
-                    required: true
+                    required: true,
+                    minlength:6
                 },
                 'UpdatePasswordForm[newPassword2]': {
                     required: true,
@@ -84,7 +85,8 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                     required: "Current password is required"
                 },
                 'UpdatePasswordForm[newPassword1]': {
-                    required: "Password is required"
+                    required: "Password is required",
+                    minlength:"Password length must be 6 characters"
                 },
                 'UpdatePasswordForm[newPassword2]': {
                     required: "Password 2 is required"

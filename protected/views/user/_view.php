@@ -16,4 +16,17 @@
         ),
     )); ?>
     </fieldset>
+        <div class="btn-toolbar" style="margin-left: 100px">
+            <?php
+            $this->widget('bootstrap.widgets.TbButton',
+                array(
+                    'buttonType'=>'button',
+                    'type'=>'primary',
+                    'label'=>'Edit contact',
+                    'icon'=>'icon-pencil icon-white',
+                    'htmlOptions'=>array(
+                        'onclick'=> 'renderEditProfileJS()',
+                    ))
+            ); ?>
+        </div>
 </div>

@@ -34,9 +34,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     <?php
     $this->widget('bootstrap.widgets.TbButton',
         array(
-            'buttonType'=>'reset',
-            'label'=>'Reset'
-        )
+            'buttonType'=>'button',
+            'label'=>'Cancel',
+            'type'=>'danger',
+            'htmlOptions'=>array(
+            'onclick'=> 'renderViewProfileJS()',
+            ))
     ); ?>
 </div>
 
@@ -54,12 +57,14 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         $("#profile-update-form").validate({
             rules: {
                 'User[email]': {
-                    required: true
+                    required: true,
+                    email:true
                 }
             },
             messages: {
                 'User[email]':{
-                    required: "Email is required"
+                    required: "Email is required",
+                    email:"Enter valid email address"
                 }
             }
         })
@@ -76,6 +81,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 data:data,
                 success:function(data){
                     jQuery.notify("Profile updated successfully", "success", {timeout: 0});
+                    renderViewProfileJS();
                 },
                 error: function(data) { // if error occured
                     jQuery.notify("Unable to update profile. Please try again", "error", {timeout: 0});

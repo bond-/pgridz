@@ -21,11 +21,8 @@
     )); ?>
         <p class="note">Fields with <span class="required">*</span> are required.</p>
         <?php echo $form->textFieldRow($newUser,'email',array('size'=>60,'maxlength'=>255,'class'=>'required')); ?>
-        <!--<div for="RegistrationForm_email" generated="true"></div>-->
         <?php echo $form->passwordFieldRow($newUser,'password',array('size'=>60,'maxlength'=>255,'class'=>'required')); ?>
-        <!--<div for="RegistrationForm_password" generated="true"></div>-->
         <?php echo $form->passwordFieldRow($newUser,'password2',array('size'=>60,'maxlength'=>255,'class'=>'required')); ?>
-        <!--<div for="RegistrationForm_password2" generated="true"></div>-->
         <div class="btn-toolbar">
             <?php $this->widget('bootstrap.widgets.TbButton',
             array(
@@ -34,9 +31,19 @@
                 'label'=>'Submit',
                 'htmlOptions'=>array(
                     'onClick'=> 'createProfileJS()',
+                    'style'=>'margin-left:200px'
                 ))
-        );
-            ?>
+        );?>
+        <?php
+            $this->widget('bootstrap.widgets.TbButton',
+                array(
+                    'buttonType'=>'button',
+                    'type'=>'danger',
+                    'label'=>'Cancel',
+                    'htmlOptions'=>array(
+                    'onClick'=> 'resetRegistrationForm()',
+                ))
+            ); ?>
         </div>
         <?php $this->endWidget(); ?>
     </div>
@@ -83,7 +90,8 @@
                     userExists:true
                 },
                 'RegistrationForm[password]': {
-                    required: true
+                    required: true,
+                    minlength:6
                 },
                 'RegistrationForm[password2]': {
                     required: true,
@@ -95,7 +103,8 @@
                     required: "Email is required"
                 },
                 'RegistrationForm[password]': {
-                    required: "Password is required"
+                    required: "Password is required",
+                    minlength:"Password length must be 6 characters"
                 },
                 'RegistrationForm[password2]': {
                     required: "Password 2 is required"
