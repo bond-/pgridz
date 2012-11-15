@@ -13,6 +13,7 @@ $this->breadcrumbs=array(
 ?>
 
 <div class="row-fluid">
+    <div class="span1"></div>
     <div class="span3">
         <div class="accordion-group">
             <div class="accordion" id="contact-accordion">
@@ -131,9 +132,10 @@ $this->breadcrumbs=array(
             </div>
         </div>
     </div>
-    <div id="contacts" class="span3 well"></div>
-    <div id="companies" class="span3 well"></div>
-    <div id="analysis" class="span3 well"></div>
+    <div id="contacts" class="span2 well"></div>
+    <div id="companies" class="span2 well"></div>
+    <div id="analysis" class="span2 well"></div>
+    <div class="span2"></div>
 </div>
 <script type="text/javascript">
     $(document).ready(function(){updateDivs()});
@@ -154,6 +156,7 @@ $this->breadcrumbs=array(
                     .fail(function ( xhr, status ) {
                         $.notify("Adding new contact failed","error");
                     });
+            $('html').animate({scrollTop: '0px'}, 300);
             return false;
         }
     }

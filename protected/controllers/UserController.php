@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'register' action
-                'actions'=>array('register','forgotPassword','verifyRegistration','verifyResetPassword','exists'),
+                'actions'=>array('register','forgotPassword','verifyRegistration','verifyResetPassword','exists','validEmail'),
                 'users'=>array('*'),
             ),
             array('allow', // allow authenticated user to perform the below listed actions
@@ -87,23 +87,26 @@ class UserController extends Controller
                 $user->join_date = gmdate("d/m/Y");
                 $user->account_locked = true;
                 $user->password=Yii::app()->hasher->hashPassword($user->password);
-                $user->save();
-                //sending registration mail
-                $token = $this->generateVerificationCode($user->id);
-                try{
-                    $message = new YiiMailMessage;
-                    $message->view = 'verifyRegistrationEmail';
-                    $message->subject = "Welcome to ".CHtml::encode(Yii::app()->name);
-                    //userModel is passed to the view
-                    $message->setBody(array(
-                            'link'=>Yii::app()->createAbsoluteUrl("user/verifyRegistration",array('t'=>$token))),
-                        'text/html');
-                    $message->addTo($user->email);
-                    $message->from = Yii::app()->params['adminEmail'];
-                    Yii::app()->mail->send($message);
-                    $this->sendResponse(200);
-                }catch (Exception $e){
-                    $this->sendResponse(503);
+                if($user->save()){
+                    //sending registration mail
+                    $token = $this->generateVerificationCode($user->id);
+                    try{
+                        $message = new YiiMailMessage;
+                        $message->view = 'verifyRegistrationEmail';
+                        $message->subject = "Welcome to ".CHtml::encode(Yii::app()->name);
+                        //userModel is passed to the view
+                        $message->setBody(array(
+                                'link'=>Yii::app()->createAbsoluteUrl("user/verifyRegistration",array('t'=>$token))),
+                            'text/html');
+                        $message->addTo($user->email);
+                        $message->from = Yii::app()->params['adminEmail'];
+                        Yii::app()->mail->send($message);
+                        $this->sendResponse(200);
+                    }catch (Exception $e){
+                        $this->sendResponse(503);
+                    }
+                }else{
+                    $this->sendResponse(400);
                 }
             }else{
                 $this->sendResponse(406, "Current password is incorrect");
@@ -403,6 +406,15 @@ class UserController extends Controller
         }else{
             $this->sendResponse(404);
         }
+    }
+
+    //To check if it's a valid domain name or not
+    public function actionValidEmail($email){
+        $domain = explode('@',$email,2);
+        if(!checkdnsrr($domain[1],'MX')) {
+            $this->sendResponse(400,'Invalid domain name: '.$domain[1]);
+        }
+        $this->sendResponse(200);
     }
 
     public function actionSendVerificationEmail(){

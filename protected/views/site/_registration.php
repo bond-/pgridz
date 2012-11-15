@@ -81,13 +81,28 @@
                 },
                 "A user already exists with this email"
         );
+        jQuery.validator.addMethod(
+                "validEmail",
+                function(value, element) {
+                    var condition = false;
+                    $.ajax('<?php echo $this->createUrl('user/validEmail')?>',{
+                        async:false,
+                        data:{email:value},
+                        success:function(){condition=true;},
+                        error:function(data){condition=false;}
+                    });
+                    return condition;
+                },
+                "This is an invalid email"
+        );
         $("#user-form").validate({
             onkeyup: false,
             rules: {
                 'RegistrationForm[email]': {
                     required: true,
                     email:true,
-                    userExists:true
+                    userExists:true,
+                    validEmail:true
                 },
                 'RegistrationForm[password]': {
                     required: true,
@@ -104,7 +119,7 @@
                 },
                 'RegistrationForm[password]': {
                     required: "Password is required",
-                    minlength:"Password length must be 6 characters"
+                    minlength:"Minimum password length is 6 characters"
                 },
                 'RegistrationForm[password2]': {
                     required: "Password 2 is required"
@@ -133,6 +148,8 @@
                         jQuery.notify("User already exists", "error", {timeout: 0});
                     }else if(data.status==503){
                         jQuery.notify("Unable to send an email now. Please verify your email address by login", "error", {timeout: 0});
+                    }else if(data.status==400){
+                        jQuery.notify("Oops looks like you didn't give a valid email", "error", {timeout: 0});
                     }else{
                         jQuery.notify("Unable to create a new account..!! Please try again.", "error", {timeout: 0});
                     }
