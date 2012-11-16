@@ -168,20 +168,20 @@
       prev.addClass('active')
     }
 
-  , listen: function () {
-      this.$element
-        .on('blur',     $.proxy(this.blur, this))
-        .on('keypress', $.proxy(this.keypress, this))
-        .on('keyup',    $.proxy(this.keyup, this))
+  , llisten: function () {
+          this.$element.on('blur', $.proxy(this.blur, this))
+              .on('keyup', $.proxy(this.keyup, this));
 
-      if (this.eventSupported('keydown')) {
-        this.$element.on('keydown', $.proxy(this.keydown, this))
+          if (this.eventSupported('keydown')) {
+              this.$element.on('keydown', $.proxy(this.keypress, this));
+          } else {
+              this.$element.on('keypress', $.proxy(this.keypress, this));
+          }
+
+          this.$menu
+              .on('click', $.proxy(this.click, this))
+              .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
       }
-
-      this.$menu
-        .on('click', $.proxy(this.click, this))
-        .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
-    }
 
   , eventSupported: function(eventName) {
       var isSupported = eventName in this.$element
