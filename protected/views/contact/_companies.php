@@ -4,7 +4,11 @@
 ?>
 
 <?php
-echo "<h4>".CHtml::link('My Companies','javascript:updateDivs();')."</h4>";
+if(isset($title)){
+    echo "<h4>".CHtml::link('My Companies <i class="icon-arrow-up"></i>','javascript:updateDivs();',array('title'=>'Back to all contacts'))."</h4>";
+}else{
+    echo "<h4>My Companies</h4>";
+}
 echo "<ul>";
 foreach($companies as $it){
     echo "<li>".CHtml::link($it->name,'javascript:updateDivs('.$it->id.');')."</li>";

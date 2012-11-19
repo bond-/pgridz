@@ -15,9 +15,9 @@ $this->menu=array(
     array('label'=>'Manage Contact', 'url'=>array('admin')),
 );
 ?>
-<div id='contact-view' class="row-fluid">
+<div id='contact-view' class="row-fluid span9">
     <div class="span5">
-        <h3>Viewing Contact: <?php echo $model->name; ?></h3>
+        <h3><?php echo $model->company->name.': '.$model->name; ?></h3>
     </div>
     <div class="span5 pull-right">
         <div class="btn-toolbar pull-right">

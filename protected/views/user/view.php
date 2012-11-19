@@ -1,11 +1,13 @@
 <?php
 $this->breadcrumbs=array(
     'My Profile',
-);
-
-$this->widget('bootstrap.widgets.TbTabs', array(
-    'tabs'=>$this->getTabularFormTabs(),
-)); ?>
+);?>
+<div class="span9">
+    <?php
+    $this->widget('bootstrap.widgets.TbTabs', array(
+        'tabs'=>$this->getTabularFormTabs(),
+    ));?>
+</div>
 
 <script type="text/javascript">
     $("a[href^='#yw1']").click(function() {

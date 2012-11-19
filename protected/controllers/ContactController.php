@@ -6,7 +6,7 @@ class ContactController extends Controller
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
-    public $layout='//layouts/main';
+    public $layout='//layouts/column1';
 
     /**
      * @return array action filters
@@ -166,24 +166,29 @@ class ContactController extends Controller
             $view = $_POST['view'];
             $data = array();
             $attributes = array('user_id' => Yii::app()->user->id);
+            $title = null;
             if($view=="contacts"){
                 if(isset($_POST['id'])){
                     $attributes['company_id']=(int)($_POST['id']);
+                    $title = Company::model()->findByAttributes(array('id'=>$attributes['company_id']))->name;
                 }
                 $data = Contact::model()->findAllByAttributes($attributes,array('order'=>'name asc'));
             }elseif($view=="companies"){
                 if(isset($_POST['id'])){
                     $attributes['id']=(int)($_POST['id']);
+                    $title = Company::model()->findByAttributes(array('id'=>$attributes['id']))->name;
                 }
                 $data = Company::model()->findAllByAttributes($attributes,array('order'=>'name asc'));
             }elseif($view=="analysis"){
-                if(isset($_POST['id']))
+                if(isset($_POST['id'])){
                     $data['id']=(int)($_POST['id']);
+                    $title = Company::model()->findByAttributes(array('id'=>$data['id']))->name;
+                }
                 $data['smartest'] = array('sort'=>'iq','order'=>'desc');
                 $data['likable'] = array('sort'=>'c_like','order'=>'desc');
                 $data['combo'] = array('sort'=>array('iq','c_like'),'order'=>'desc');
             }
-            $this->renderPartial('_'.$view,array($view=>$data));
+            $this->renderPartial('_'.$view,array($view=>$data,'title'=>$title));
         }else{
             $this->sendResponse(400);
         }
@@ -209,23 +214,18 @@ class ContactController extends Controller
      */
     public function actionList()
     {
-        $results = array();
         $criteria = new CDbCriteria;
-        $field = strtolower($_GET['field']);
-        if($field!='id'){
-            $criteria->addSearchCondition('user_id',Yii::app()->user->id);
-            $criteria->compare('lower('. $field .')',strtolower($_GET['query']),true);
-            $criteria->limit = 8;
-            $criteria->order = $field.' asc';
-        }
-        $records = Contact::model()->findAll($criteria);
-
+        $criteria->compare('lower(name)',strtolower($_GET['name']),true);
+        $criteria->limit = 8;
+        $criteria->order = 'name asc';
+        $records = Contact::model()->with(array('user'=>array('joinType'=>'INNER JOIN','condition'=>'user.id='.Yii::app()->user->id)))->findAll($criteria);
         if(!isset($records))
             $records = array();
+        $names = array();
         foreach($records as $value){
-            array_push($results,$value->$field);
+            array_push($names,$value->name);
         }
-        echo CJSON::encode($results);
+        echo CJSON::encode($names);
     }
 
     /**
@@ -371,11 +371,13 @@ EOD;
                 $objWorksheet = $file->setActiveSheetIndex(0);
                 $highestRow = $objWorksheet->getHighestRow();
                 $highestColumn = $objWorksheet->getHighestColumn();
+                $errorsArray = array();
                 if(strcmp(PHPExcel_Cell::stringFromColumnIndex(12),$highestColumn)!=0){
                     unlink($_FILES["UploadForm"]["tmp_name"]["file"]);
-                    $this->sendResponse(400,"Invalid format, Expecting columns: ".PHPExcel_Cell::stringFromColumnIndex(12).", Found ".$highestColumn." columns");
+                    Yii::app()->user->setFlash('error',"Invalid format, Expecting columns: ".PHPExcel_Cell::stringFromColumnIndex(12).", Found ".$highestColumn." columns");
+                    $this->render('upload',array('model'=>$model,'errors'=>$errorsArray));
+                    Yii::app()->end();
                 }
-                $errorsArray = array();
                 for ($row = 1; $row <= $highestRow; ++$row) {
                     // Fetch the data of the columns you need
                     $col1 = $objWorksheet->getCellByColumnAndRow(0, $row)->getValue();
@@ -420,7 +422,7 @@ EOD;
                 }
                 $this->render('upload',array('model'=>$model,'errors'=>$errorsArray));
             }else{
-                $this->sendResponse(400,"Error in upload");
+                Yii::app()->user->setFlash('error',"Error in upload");
             }
             Yii::app()->end();
         }

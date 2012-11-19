@@ -16,10 +16,10 @@ $this->menu=array(
 	array('label'=>'Manage Contact', 'url'=>array('admin')),
 );
 ?>
-<div class="row-fluid">
+<div class="row-fluid span9">
     <div class="row-fluid">
         <div class="span12">
-            <h3>Updating Contact: <?php echo $contact->name; ?></h3>
+            <h3><?php echo $contact->company->name.': '.$contact->name; ?></h3>
         </div>
     </div>
     <div class="row-fluid">

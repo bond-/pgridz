@@ -9,7 +9,7 @@
     );
 ?>
 
-<div class="row-fluid">
+<div class="row-fluid span9">
     <div class="span7">
         <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'id'=>'upload-form',

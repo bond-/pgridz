@@ -76,6 +76,8 @@ class SiteController extends Controller
 	 */
 	public function actionContact()
 	{
+        if(!Yii::app()->user->isGuest)
+            $this->layout='//layouts/column1';
 		$model=new ContactForm;
 		if(isset($_POST['ContactForm']))
 		{
