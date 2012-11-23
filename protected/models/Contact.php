@@ -47,10 +47,7 @@ class Contact extends CActiveRecord
     public function defaultScope()
     {
         return array(
-            'alias' => $this->tableName(),
-            'with'=> array(
-                array('user'=>array('joinType'=>'INNER JOIN','condition'=>'user.id='.Yii::app()->user->id))
-            )
+            'alias' => $this->tableName()
         );
     }
 
