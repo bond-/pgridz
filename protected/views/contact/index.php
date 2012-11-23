@@ -48,7 +48,7 @@ $this->breadcrumbs=array(
                     'model'=>$contact,'attribute'=>'name','htmlOptions'=>array('class'=>'span12','autocomplete'=>'off'),
                     'options'=>array(
                         'name'=>'typeahead',
-                        'source'=>'js:function(query,callback){$.ajax("'.$this->createUrl('/contact/list').'",{data:{name:query,field:"name"},success:function(data){callback(JSON.parse(data));},error:function(){callback([]);}});}',
+                        'source'=>'js:function(query,callback){$.ajax("'.$this->createUrl('/contact/list').'",{data:{query:query,field:"name"},success:function(data){callback(JSON.parse(data));},error:function(){callback([]);}});}',
                         'matcher'=>"js:function(item) {return ~item.toLowerCase().indexOf(this.query.toLowerCase());}",
                     ),
                 )); ?>
