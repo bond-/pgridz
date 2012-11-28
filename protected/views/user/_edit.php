@@ -80,11 +80,11 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 url: '<?php echo Yii::app()->createAbsoluteUrl("user/updateProfile"); ?>',
                 data:data,
                 success:function(data){
-                    jQuery.notify("Profile updated successfully", "success", {timeout: 0});
+                    jQuery.notify("Profile updated successfully", "success");
                     renderViewProfileJS();
                 },
                 error: function(data) { // if error occured
-                    jQuery.notify("Unable to update profile. Please try again", "error", {timeout: 0});
+                    jQuery.notify("Unable to update profile. Please try again", "error");
                 }
             });
         }

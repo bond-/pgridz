@@ -1,5 +1,5 @@
 Dear admin,<br/><br/>
-<?php echo CHtml::link($name,'mailto:'.$email)?> has a suggestion/comment which is listed below:
+<?php echo CHtml::link($name,'mailto:'.$email,array('target'=>'_blank'))?> has a suggestion/comment which is listed below:
 <br/><br/>
 <?php echo $body?>
 <br/><br/>

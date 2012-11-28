@@ -10,8 +10,12 @@ if(isset($title)){
     echo "<h4>My Companies</h4>";
 }
 echo "<ul>";
-foreach($companies as $it){
-    echo "<li>".CHtml::link($it->name,'javascript:updateDivs('.$it->id.');')."</li>";
+if(sizeof($companies)>1){
+    foreach($companies as $it){
+        echo "<li>".CHtml::link($it->name,'javascript:updateDivs('.$it->id.');')."</li>";
+    }
+}else{
+    echo "<li>".$companies[0]->name."</li>";
 }
 echo "</ul>";
 ?>

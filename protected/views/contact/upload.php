@@ -41,7 +41,7 @@
     </div>
     <?php if(isset($errors) && !empty($errors)) :?>
     <div class="span5 well">
-        <p class="alert alert-info">Note: Apart from the errors listed below, others have been uploaded successfully</p>
+        <p class="alert alert-info">Note: The errors listed below have been ignored and contacts have been uploaded successfully</p>
         <h4>Errors in upload</h4>
         <?php
         echo '<ul class="text-error">';

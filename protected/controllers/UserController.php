@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'register' action
-                'actions'=>array('register','forgotPassword','verifyRegistration','verifyResetPassword','exists','validEmail'),
+                'actions'=>array('register','forgotPassword','verifyRegistration','exists','validEmail'),
                 'users'=>array('*'),
             ),
             array('allow', // allow authenticated user to perform the below listed actions
@@ -281,10 +281,10 @@ class UserController extends Controller
     /**
      * Password reset verification
      */
-    public function actionVerifyResetPassword(){
-        if(isset($_GET['t'])){
-            $token = $_GET['t'];
-            $user = $this->actionVerify($token);
+    public function actionForgotPassword(){
+        if(isset($_POST['ForgotPasswordForm']['email'])){
+            $email = $_POST['ForgotPasswordForm']['email'];
+            $user = User::model()->findByAttributes(array('email'=>$email));
             if($user!=null){
                 $generatedPassword = $this->generatePassword();
                 $dbUser = $this->loadModel($user->id);
@@ -301,20 +301,17 @@ class UserController extends Controller
                     $message->addTo($user->email);
                     $message->from = Yii::app()->params['adminEmail'];
                     Yii::app()->mail->send($message);
-                    Yii::app()->user->setFlash('success','New password has been sent to your email Id :'.$user->email);
-                    $this->redirect(array('site/index'));
+                    echo 'New password has been sent to your email address: '.$user->email;
                 }
                 catch(Exception $e){
-                    Yii::app()->user->setFlash('error','Unable to send email to : '.$user->email);
+                    $this->sendResponse(500,'Unable to send email to : '.$user->email);
                 }
 
             }else{
-                Yii::app()->user->setFlash('error','Verification is un-successful. Invalid code');
-                $this->redirect(array('site/index'));
+                $this->sendResponse(404,'Unknown user');
             }
         }else{
-            Yii::app()->user->setFlash('error','Verification is un-successful. Invalid code');
-            $this->redirect(array('site/index'));
+            $this->sendResponse(400,'Bad request');
         }
     }
     /**
@@ -349,7 +346,7 @@ class UserController extends Controller
     /**
      * To send an email to user with verification token
      */
-    public function actionForgotPassword(){
+/*    public function actionForgotPassword(){
         $model=new ForgotPasswordForm();
         if(isset($_POST['ForgotPasswordForm']))
         {
@@ -378,7 +375,7 @@ class UserController extends Controller
                 $this->sendResponse(500, "User doesn't exist..!!");
             }
         }
-    }
+    }*/
 
     //To render user details in view mode
     public function actionRenderPartialView(){

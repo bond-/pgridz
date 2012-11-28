@@ -23,13 +23,13 @@
     <script type="text/javascript">
         $(document).ready(function(){
         <?php if(Yii::app()->user->hasFlash('success')): ?>
-            $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('success') ?>", "success", {timeout: 0});});
+            $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('success') ?>", "success");});
             <?php endif; ?>
         <?php if(Yii::app()->user->hasFlash('warning')): ?>
-            $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('warning') ?>", "warning", {timeout: 0});});
+            $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('warning') ?>", "warning");});
             <?php endif; ?>
         <?php if(Yii::app()->user->hasFlash('error')): ?>
-            $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('error') ?>", "error", {timeout: 0});});
+            $(document).ready(function(){jQuery.notify("<?php echo Yii::app()->user->getFlash('error') ?>", "error");});
             <?php endif; ?>
         });
         <?php if(!Yii::app()->user->isGuest && User::model()->findByPk(Yii::app()->user->id)->getAccountLocked()):?>
@@ -38,14 +38,14 @@
                     beforeSend:showLoading,
                     success:function(){
                         hideLoading();
-                        jQuery.notify("Email has been sent successfully", "success", {timeout: 0})
+                        jQuery.notify("Email has been sent successfully", "success");
                     },
                     error:function(data){
                         hideLoading();
                         if(data.status==403){
-                            jQuery.notify("You are not authorized to perform this action", "warning", {timeout: 0})
+                            jQuery.notify("You are not authorized to perform this action", "warning");
                         }else{
-                            jQuery.notify("Unable to send email now, please try again later", "error", {timeout: 0})
+                            jQuery.notify("Unable to send email now, please try again later", "error");
                         }
                     }
                 });
@@ -106,7 +106,7 @@
     <footer>
         <div class="container-fluid">
             <p class="muted credit">
-                Copyright &copy; <?php echo date('Y'); ?> by Powergridz.com | All Rights Reserved | <?php echo Yii::powered(); ?>
+                Copyright &copy; <?php echo date('Y'); ?> by Powergridz.com | All Rights Reserved
             </p>
         </div>
     </footer><!-- footer -->

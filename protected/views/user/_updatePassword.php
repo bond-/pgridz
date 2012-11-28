@@ -105,13 +105,13 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 url: '<?php echo Yii::app()->createAbsoluteUrl("user/updatePassword"); ?>',
                 data:data,
                 success:function(data){
-                    jQuery.notify("Password updated successfully", "success", {timeout: 0});
+                    jQuery.notify("Password updated successfully", "success");
                 },
                 error: function(data) { // if error occured
                     if(data.status==400){
-                        jQuery.notify("Current password is not correct", "error", {timeout: 0});
+                        jQuery.notify("Current password is not correct", "error");
                     }else{
-                        jQuery.notify("Unable to update password. Please try again", "error", {timeout: 0});
+                        jQuery.notify("Unable to update password. Please try again", "error");
                     }
                 }
             });

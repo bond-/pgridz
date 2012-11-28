@@ -20,8 +20,8 @@
     $likableAttrs['order'] = $analysis['likable']['order'];
     $comboAttrs['sort'] = $analysis['combo']['sort'];
     $comboAttrs['order'] = $analysis['combo']['order'];
-    echo '<li>'.CHtml::link('Smartest',$this->createUrl('contact/export',$smartestAttrs)).'</li>'.
-    '<li>'.CHtml::link('Most likable',$this->createUrl('contact/export',$likableAttrs)).'</li>'.
-    '<li>'.CHtml::link('Combo',$this->createUrl('contact/export',$comboAttrs)).'</li>';
+    echo '<li>'.CHtml::link('Smartest',$this->createUrl('contact/export',$smartestAttrs),array('target'=>'_blank')).'</li>'.
+    '<li>'.CHtml::link('Most likable',$this->createUrl('contact/export',$likableAttrs),array('target'=>'_blank')).'</li>'.
+    '<li>'.CHtml::link('Combo',$this->createUrl('contact/export',$comboAttrs),array('target'=>'_blank')).'</li>';
     ?>
 </ul>

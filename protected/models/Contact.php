@@ -64,6 +64,7 @@ class Contact extends CActiveRecord
             array('c_like','in','range'=>array(0,1,2,3,4)),
 			array('user_id, company_id, name', 'required'),
 			array('user_id, company_id, iq, c_like', 'numerical', 'integerOnly'=>true),
+            array('phone','numerical'),
 			array('name, title, group_division, city, country, phone, email, school', 'length', 'max'=>255),
 			array('notes, questions_to_ask', 'safe'),
 			// The following rule is used by search().

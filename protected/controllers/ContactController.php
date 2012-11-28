@@ -411,14 +411,21 @@ EOD;
                     ));
                     $errors = $contact->getErrors();
                     if(!empty($errors)){
-                        array_push($errorsArray,"Error in row ".$row.": ".CJSON::encode($contact->getErrors()));
+                        foreach($contact->attributeNames() as $attr){
+                            $error = $contact->getError($attr);
+                            if(isset($error)){
+                                $contact->$attr = null;
+                            }
+                        }
+                        $contact->save();
+                        array_push($errorsArray,"Ignoring error in row ".$row.": ".CJSON::encode($errors));
                     }
                 }
                 $this->cleanupUploader($objWorksheet);
                 if(empty($errorsArray)){
                     Yii::app()->user->setFlash('success','All the contacts have been uploaded successfully');
                 }else{
-                    Yii::app()->user->setFlash('warning','Oops, some contacts failed to upload and are listed below');
+                    Yii::app()->user->setFlash('warning','Oops, some contacts are uploaded ignoring certain fields and are listed below');
                 }
                 $this->render('upload',array('model'=>$model,'errors'=>$errorsArray));
             }else{

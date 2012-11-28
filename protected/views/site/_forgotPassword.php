@@ -45,27 +45,12 @@
     });
     //validate User registration form
     function validateForgotPasswordForm(){
-        jQuery.validator.addMethod(
-                "userNotExists",
-                function(value, element) {
-                    var condition = false;
-                    $.ajax('<?php echo $this->createUrl('user/exists')?>',{
-                        async:false,
-                        data:{email:value},
-                        success:function(){condition=false;},
-                        error:function(data){condition=true;}
-                    });
-                    return !condition;
-                },
-                "No user exists with this email"
-        );
         $("#forgot-password-form").validate({
             onkeyup: false,
             rules: {
                 'ForgotPasswordForm[email]': {
                     required: true,
-                    email: true,
-                    userNotExists: true
+                    email: true
                 }
             },
             messages: {
@@ -88,17 +73,13 @@
                 beforeSend:function(){showLoading();resetForgotPasswordForm();},
                 success:function(data){
                     hideLoading();
-                    jQuery.notify("An email is sent to your email address to reset your password", "success", {timeout: 0});
+                    alert(data);
+                    console.log(data);
+                    jQuery.notify(data, "success");
                 },
                 error: function(data) { // if error occured
                     hideLoading();
-                    if(data.status==500){
-                        jQuery.notify("User doesn't exit", "error", {timeout: 5});
-                    }else if(data.status==503){
-                        jQuery.notify("Unable to update password..!! Please try again.", "error", {timeout: 5});
-                    }else{
-                        jQuery.notify("Unable to update password..!! Please try again.", "error", {timeout: 5});
-                    }
+                    jQuery.notify(data.responseText, "error", {timeout: 5});
                 }
             });
         }
