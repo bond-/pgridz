@@ -73,8 +73,6 @@
                 beforeSend:function(){showLoading();resetForgotPasswordForm();},
                 success:function(data){
                     hideLoading();
-                    alert(data);
-                    console.log(data);
                     jQuery.notify(data, "success");
                 },
                 error: function(data) { // if error occured
