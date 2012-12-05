@@ -215,15 +215,16 @@ class ContactController extends Controller
     public function actionList($field,$query)
     {
         $criteria = new CDbCriteria;
-        $criteria->compare('lower('.$field.')',strtolower($query),true);
-        $criteria->limit = 8;
-        $criteria->order = $field.' asc';
+        $criteria->compare('lower(contact.'.$field.')',strtolower($query),true);
+//        $criteria->limit = 8;
+        $criteria->order = 'contact.'.$field.' asc';
         $records = Contact::model()->with(array('user'=>array('joinType'=>'INNER JOIN','condition'=>'user.id='.Yii::app()->user->id)))->findAll($criteria);
         if(!isset($records))
             $records = array();
         $names = array();
         foreach($records as $value){
-            array_push($names,$value->$field);
+            if(!in_array($value->$field,$names))
+                array_push($names,$value->$field);
         }
         echo CJSON::encode($names);
     }
