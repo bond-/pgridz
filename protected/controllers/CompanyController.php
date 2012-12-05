@@ -57,7 +57,8 @@ class CompanyController extends Controller
 
 		if(isset($_POST['Company']))
 		{
-			$model->attributes=$_POST['Company'];
+            $_POST['Company'] = array_map('trim', $_POST['Company']);
+            $model->attributes=$_POST['Company'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -81,7 +82,8 @@ class CompanyController extends Controller
 
 		if(isset($_POST['Company']))
 		{
-			$model->attributes=$_POST['Company'];
+            $_POST['Company'] = array_map('trim', $_POST['Company']);
+            $model->attributes=$_POST['Company'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

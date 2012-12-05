@@ -64,6 +64,7 @@ class ContactController extends Controller
 
         if(isset($_POST['Contact']))
         {
+            $_POST['Contact'] = array_map('trim', $_POST['Contact']);
             $model->attributes=$_POST['Contact'];
             if($model->save())
                 $this->redirect(array('view','id'=>$model->id));
@@ -91,8 +92,9 @@ class ContactController extends Controller
 
         if(isset($_POST['Contact']))
         {
+            $_POST['Contact'] = array_map('trim', $_POST['Contact']);
             $contact->attributes=$_POST['Contact'];
-            $companyName = $_POST['Company']['name'];
+            $companyName = trim($_POST['Company']['name']);
             $company = Company::model()->findByAttributes(array('name'=> $companyName,'user_id'=>$loggedInUserId));
             if(!isset($company)){
                 $company = new Company;
@@ -142,6 +144,8 @@ class ContactController extends Controller
 
         if(isset($_POST['Contact']))
         {
+            $_POST['Contact'] = array_map('trim', $_POST['Contact']);
+            $_POST['Company'] = array_map('trim', $_POST['Company']);
             $contact->attributes=$_POST['Contact'];
             $company->attributes= $_POST['Company'];
             $companyName = $company->name;
@@ -381,19 +385,19 @@ EOD;
                 }
                 for ($row = 1; $row <= $highestRow; ++$row) {
                     // Fetch the data of the columns you need
-                    $col1 = $objWorksheet->getCellByColumnAndRow(0, $row)->getValue();
-                    $col2 = $objWorksheet->getCellByColumnAndRow(1, $row)->getValue();
-                    $col3 = $objWorksheet->getCellByColumnAndRow(2, $row)->getValue();
-                    $col4 = $objWorksheet->getCellByColumnAndRow(3, $row)->getValue();
-                    $col5 = $objWorksheet->getCellByColumnAndRow(4, $row)->getValue();
-                    $col6 = $objWorksheet->getCellByColumnAndRow(5, $row)->getValue();
-                    $col7 = $objWorksheet->getCellByColumnAndRow(6, $row)->getValue();
-                    $col8 = $objWorksheet->getCellByColumnAndRow(7, $row)->getValue();
-                    $col9 = $objWorksheet->getCellByColumnAndRow(8, $row)->getValue();
-                    $col10 = $objWorksheet->getCellByColumnAndRow(9, $row)->getValue();
-                    $col11 = $objWorksheet->getCellByColumnAndRow(10, $row)->getValue();
-                    $col12 = $objWorksheet->getCellByColumnAndRow(11, $row)->getValue();
-                    $col13 = $objWorksheet->getCellByColumnAndRow(12, $row)->getValue();
+                    $col1 = trim($objWorksheet->getCellByColumnAndRow(0, $row)->getValue());
+                    $col2 = trim($objWorksheet->getCellByColumnAndRow(1, $row)->getValue());
+                    $col3 = trim($objWorksheet->getCellByColumnAndRow(2, $row)->getValue());
+                    $col4 = trim($objWorksheet->getCellByColumnAndRow(3, $row)->getValue());
+                    $col5 = trim($objWorksheet->getCellByColumnAndRow(4, $row)->getValue());
+                    $col6 = trim($objWorksheet->getCellByColumnAndRow(5, $row)->getValue());
+                    $col7 = trim($objWorksheet->getCellByColumnAndRow(6, $row)->getValue());
+                    $col8 = trim($objWorksheet->getCellByColumnAndRow(7, $row)->getValue());
+                    $col9 = trim($objWorksheet->getCellByColumnAndRow(8, $row)->getValue());
+                    $col10 = trim($objWorksheet->getCellByColumnAndRow(9, $row)->getValue());
+                    $col11 = trim($objWorksheet->getCellByColumnAndRow(10, $row)->getValue());
+                    $col12 = trim($objWorksheet->getCellByColumnAndRow(11, $row)->getValue());
+                    $col13 = trim($objWorksheet->getCellByColumnAndRow(12, $row)->getValue());
 
                     $contact = $this->createContact(array(
                         'companyName'=>$col1,
